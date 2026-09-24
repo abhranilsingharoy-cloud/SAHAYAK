@@ -5,10 +5,14 @@ import gsap from "gsap";
 
 // ─── Per-section GSAP entry animation configs ────────────────────────────────
 const ENTRY: Array<gsap.TweenVars | null> = [
-  null,                                                           // 0 Hero
+  null,                                                           // 0 Hero        — initial, no anim
   { y: 90, opacity: 0, filter: "blur(10px)" },                  // 1 Features
   { scale: 0.88, opacity: 0, filter: "blur(8px)" },             // 2 Impact Stats
-  { y: 80, opacity: 0 },                                         // 3 Modules
+  { x: -90, opacity: 0, filter: "blur(8px)" },                  // 3 How It Works
+  { y: 80, opacity: 0 },                                         // 4 Stats+Trust
+  { x: 90, opacity: 0, filter: "blur(8px)" },                   // 5 Testimonials
+  { y: 80, opacity: 0, filter: "blur(8px)" },                   // 6 FAQ
+  { y: 50, opacity: 0 },                                         // 7 Footer
 ];
 
 const EASE_IN  = "power2.in";
@@ -17,7 +21,8 @@ const DUR_OUT  = 0.38;
 const DUR_IN   = 0.82;
 
 const LABELS = [
-  "Home", "Architecture", "Impact Metrics", "Modules",
+  "Home", "Crop Intelligence", "Our Features", "How It Works",
+  "Impact", "Farmer Stories", "FAQ", "Contact",
 ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -28,7 +33,7 @@ export default function FullPageScroller({ children }: { children: ReactNode }) 
   const [active, setActive] = useState(0);
   const refs     = useRef<(HTMLDivElement | null)[]>([]);
   const busy     = useRef(false);
-  const cur      = useRef(0);
+  const cur      = useRef(0);           // tracks active index without re-render lag
 
   // ── Go to panel ─────────────────────────────────────────────────────────────
   const goTo = (next: number, dir: 1 | -1) => {
@@ -42,6 +47,10 @@ export default function FullPageScroller({ children }: { children: ReactNode }) 
     cur.current  = next;
     setActive(next);
     
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("kisanseva-panel-change", { detail: { activePanel: next } }));
+    }
+
     // ── exit current ──
     gsap.to(prevEl, {
       opacity: 0,
@@ -77,6 +86,24 @@ export default function FullPageScroller({ children }: { children: ReactNode }) 
         ? { opacity: 1, y: 0, x: 0, scale: 1, filter: "blur(0px)", zIndex: 2, display: "flex" }
         : { opacity: 0, zIndex: 1, display: "none" });
     });
+  }, []);
+
+  // ── Hide the layout-level footer while this scroller is mounted ──────────────
+  useEffect(() => {
+    const all = document.querySelectorAll<HTMLElement>("footer");
+    const container = document.getElementById("fullpage-scroller-root");
+    const hidden: HTMLElement[] = [];
+
+    all.forEach(f => {
+      if (!container?.contains(f)) {
+        f.style.setProperty("display", "none", "important");
+        hidden.push(f);
+      }
+    });
+
+    return () => {
+      hidden.forEach(f => f.style.removeProperty("display"));
+    };
   }, []);
 
   // ── Wheel ───────────────────────────────────────────────────────────────────
@@ -181,8 +208,20 @@ export default function FullPageScroller({ children }: { children: ReactNode }) 
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  });
+  }); // Intentionally missing dependency array so goTo is fresh
 
+  // ── External Navigation Events ───────────────────────────────────────────────
+  useEffect(() => {
+    const handleScrollToTop = () => {
+      if (cur.current !== 0) {
+        goTo(0, -1);
+      }
+    };
+    window.addEventListener("kisanseva-scroll-to-top", handleScrollToTop);
+    return () => window.removeEventListener("kisanseva-scroll-to-top", handleScrollToTop);
+  }); // Intentionally missing dependency array so goTo is fresh
+
+  // ─────────────────────────────────────────────────────────────────────────────
   return (
     <div
       id="fullpage-scroller-root"
@@ -242,15 +281,15 @@ export default function FullPageScroller({ children }: { children: ReactNode }) 
               height:       i === active ? 28 : 8,
               borderRadius: 99,
               background:   i === active
-                ? "#ba1a1a"
+                ? "#65a30d"
                 : i < active
-                  ? "rgba(186,26,26,0.3)"
+                  ? "rgba(101,163,13,0.3)"
                   : "rgba(148,163,184,0.4)",
               border:     "none",
               cursor:     "pointer",
               padding:    0,
               transition: "all 0.4s cubic-bezier(0.34,1.56,0.64,1)",
-              boxShadow:  i === active ? "0 0 0 3px rgba(186,26,26,0.15)" : "none",
+              boxShadow:  i === active ? "0 0 0 3px rgba(101,163,13,0.15)" : "none",
             }}
           />
         ))}
@@ -289,7 +328,7 @@ export default function FullPageScroller({ children }: { children: ReactNode }) 
           left:       0,
           height:     2,
           width:      `${((active) / (N - 1)) * 100}%`,
-          background: "linear-gradient(to right, #ba1a1a, #93000a)",
+          background: "linear-gradient(to right, #65a30d, #84cc16)",
           transition: "width 0.5s cubic-bezier(0.22,1,0.36,1)",
           zIndex:     50,
         }}
@@ -297,3 +336,4 @@ export default function FullPageScroller({ children }: { children: ReactNode }) 
     </div>
   );
 }
+

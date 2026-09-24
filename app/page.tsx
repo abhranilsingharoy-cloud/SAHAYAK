@@ -1,214 +1,271 @@
 "use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { 
-  Shield, Activity, MapPin, Brain, Phone, ArrowRight,
-  Microscope, Bell, ShieldCheck, HeartPulse
-} from 'lucide-react';
-import FullPageScroller from './components/ui/FullPageScroller';
+import HowItWorks from "./components/home/HowItWorks";
+import AgriFeatures from "./components/home/AgriFeatures";
+import AgriImpact from "./components/home/AgriImpact";
+import AgriStats from "./components/home/AgriStats";
+import AgriTrustStrip from "./components/home/AgriTrustStrip";
+import FarmerTestimonials from "./components/home/FarmerTestimonials";
+import AgriFAQ from "./components/home/AgriFAQ";
+import AgriFooter from "./components/layout/AgriFooter";
+import FullPageScroller from "./components/ui/FullPageScroller";
+import { ScrollReveal, StaggerReveal, StaggerChild } from "./components/ui/ScrollReveal";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function LandingPage() {
+import FloatingDemoVideo from "./components/home/FloatingDemoVideo";
+import AgriMapVisualization from "./components/home/AgriMapVisualization";
+
+/** Shown when URL contains ?judge=true — gives evaluators instant access to all features */
+function JudgePanel() {
+  const params = useSearchParams();
+  if (params.get("judge") !== "true") return null;
+  const features = [
+    { label: "🤖 AI Diagnosis", href: "/diagnose", desc: "38 disease classes · 93.2% accuracy" },
+    { label: "🗣️ AI Agent (Hindi)", href: "/agent", desc: "Voice input · 8 languages · Groq LLM" },
+    { label: "📊 Live Markets", href: "/market", desc: "Real-time APMC mandi prices" },
+    { label: "📡 Dashboard", href: "/dashboard", desc: "140M+ farmer impact strip" },
+    { label: "📻 Krishi Radio", href: "/community", desc: "6 live HTTPS streams" },
+    { label: "🏥 API Health", href: "/api/health", desc: "15 feature flags · service status" },
+  ];
   return (
-    <div className="font-sans selection:bg-[#000666] selection:text-white">
-      
-      {/* NAVBAR */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-[#f0e6e4] transition-all">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#00044d] to-[#000666] flex items-center justify-center shadow-md">
-              <Shield size={22} className="text-[#ffead6]" />
-            </div>
-            <span className="font-black text-2xl tracking-tight text-[#000666]">SAHAYAK-AI</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link 
-              href="/dashboard" 
-              className="px-6 py-2.5 rounded-full font-bold bg-[#ba1a1a] text-white hover:bg-[#93000a] transition-colors shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-            >
-              System Login
-            </Link>
-          </div>
+    <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 9999, background: "linear-gradient(135deg,#166534,#064e3b)", padding: "10px 20px", boxShadow: "0 4px 20px rgba(0,0,0,0.3)" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+        <span style={{ color: "#86efac", fontWeight: 800, fontSize: "0.8rem", whiteSpace: "nowrap", flexShrink: 0 }}>🏆 SIH JUDGE MODE</span>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", flex: 1 }}>
+          {features.map(f => (
+            <a key={f.href} href={f.href} style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.2)", color: "#fff", padding: "5px 12px", borderRadius: 8, textDecoration: "none", fontSize: "0.75rem", fontWeight: 700, display: "flex", flexDirection: "column", lineHeight: 1.3 }}>
+              {f.label}
+              <span style={{ fontWeight: 400, color: "rgba(255,255,255,0.6)", fontSize: "0.65rem" }}>{f.desc}</span>
+            </a>
+          ))}
         </div>
-      </header>
-
-      <FullPageScroller>
-        {/* PANEL 0: HERO */}
-        <div className="w-full h-full bg-[#fff8f6] relative flex flex-col items-center justify-center pt-20">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#ffead6] rounded-full blur-[120px] opacity-50 pointer-events-none" />
-          
-          <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[#ba1a1a]/20 text-[#ba1a1a] font-bold text-xs uppercase tracking-widest mb-8 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-[#ba1a1a] animate-pulse" />
-              Live National Helpline Integration
-            </div>
-            <h1 className="text-5xl md:text-7xl font-black text-[#000666] leading-[1.1] tracking-tight mb-6">
-              Intelligent Crisis <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ba1a1a] to-[#944b00]">
-                Intercept & Response
-              </span>
-            </h1>
-            <p className="text-lg md:text-xl text-[#534341] max-w-2xl mx-auto font-medium leading-relaxed mb-10">
-              Real-time trauma assessment, automated vulnerability indexing, and autonomous zero-touch dispatch for the National Helpline Against Atrocities (14566).
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link 
-                href="/dashboard" 
-                className="w-full sm:w-auto px-8 py-4 rounded-full font-black text-lg bg-[#000666] text-white hover:bg-[#00044d] transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 flex items-center justify-center gap-2"
-              >
-                Access Dashboard <ArrowRight size={20} />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* PANEL 1: PLATFORM ARCHITECTURE */}
-        <div className="w-full h-full bg-white flex flex-col justify-center pt-20 pb-4">
-          <div className="max-w-7xl mx-auto px-6 w-full">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl md:text-5xl font-black text-[#000666] mb-4 tracking-tight">Engineered for Rapid Response</h2>
-              <p className="text-[#534341] font-medium text-lg">Deep-learning modules purpose-built for high-stress emergency triage.</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="p-6 rounded-3xl bg-[#fff8f6] border border-[#f0e6e4] hover:shadow-xl transition-all group">
-                <div className="w-14 h-14 rounded-2xl bg-[#ffdad6] text-[#ba1a1a] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <Microscope size={28} />
-                </div>
-                <h3 className="text-lg font-bold text-[#000666] mb-2">Acoustic Biomarkers</h3>
-                <p className="text-[#534341] text-xs leading-relaxed mb-4">
-                  Analyzes voice tremors and speech rate in real-time to detect fear and stress levels before the caller even explains the situation.
-                </p>
-                <div className="flex gap-2">
-                  <span className="text-[9px] font-bold px-2 py-1 bg-white rounded-md border border-[#f0e6e4] text-[#857371] uppercase">RNNoise</span>
-                </div>
-              </div>
-
-              <div className="p-6 rounded-3xl bg-[#fff8f6] border border-[#f0e6e4] hover:shadow-xl transition-all group">
-                <div className="w-14 h-14 rounded-2xl bg-[#ffead6] text-[#944b00] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <Brain size={28} />
-                </div>
-                <h3 className="text-lg font-bold text-[#000666] mb-2">Contextual NLP</h3>
-                <p className="text-[#534341] text-xs leading-relaxed mb-4">
-                  Transcribes dialects (like Bundelkhandi) via Whisper Large-v3 and cross-references keywords with the PoA Act database.
-                </p>
-                <div className="flex gap-2">
-                  <span className="text-[9px] font-bold px-2 py-1 bg-white rounded-md border border-[#f0e6e4] text-[#857371] uppercase">Whisper V3</span>
-                </div>
-              </div>
-
-              <div className="p-6 rounded-3xl bg-[#fff8f6] border border-[#f0e6e4] hover:shadow-xl transition-all group">
-                <div className="w-14 h-14 rounded-2xl bg-[#e0e5ff] text-[#000666] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <MapPin size={28} />
-                </div>
-                <h3 className="text-lg font-bold text-[#000666] mb-2">Predictive Hotspots</h3>
-                <p className="text-[#534341] text-xs leading-relaxed mb-4">
-                  Spatiotemporal mapping of incident density. Predicts future volatility zones up to 30 days in advance to pre-deploy resources.
-                </p>
-                <div className="flex gap-2">
-                  <span className="text-[9px] font-bold px-2 py-1 bg-white rounded-md border border-[#f0e6e4] text-[#857371] uppercase">Forecast AI</span>
-                </div>
-              </div>
-
-              <div className="p-6 rounded-3xl bg-[#fff8f6] border border-[#f0e6e4] hover:shadow-xl transition-all group">
-                <div className="w-14 h-14 rounded-2xl bg-[#d3f4e6] text-[#0d7a46] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <Bell size={28} />
-                </div>
-                <h3 className="text-lg font-bold text-[#000666] mb-2">Zero-Touch Dispatch</h3>
-                <p className="text-[#534341] text-xs leading-relaxed mb-4">
-                  Automatically alerts PCR units, hospitals, and legal aid (NALSA) based on the computed SVI (Severity Vulnerability Index).
-                </p>
-                <div className="flex gap-2">
-                  <span className="text-[9px] font-bold px-2 py-1 bg-white rounded-md border border-[#f0e6e4] text-[#857371] uppercase">Automated</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* PANEL 2: IMPACT METRICS */}
-        <div className="w-full h-full bg-[#000666] flex flex-col justify-center pt-20 pb-4">
-          <div className="max-w-7xl mx-auto px-6 w-full text-white">
-            <div className="text-center mb-16">
-               <span className="text-xs font-bold text-[#ffead6] uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full border border-white/20">MEASURABLE RESULTS</span>
-               <h3 className="text-3xl sm:text-4xl font-black text-white mt-4">Immediate Intercepts</h3>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              <div>
-                <div className="text-4xl md:text-5xl font-black mb-2 text-[#ffead6]">420ms</div>
-                <div className="text-sm font-bold text-white/70 uppercase tracking-widest">Triage Latency</div>
-              </div>
-              <div>
-                <div className="text-4xl md:text-5xl font-black mb-2 text-[#ffead6]">94.3%</div>
-                <div className="text-sm font-bold text-white/70 uppercase tracking-widest">ASR Accuracy</div>
-              </div>
-              <div>
-                <div className="text-4xl md:text-5xl font-black mb-2 text-[#ffead6]">24/7</div>
-                <div className="text-sm font-bold text-white/70 uppercase tracking-widest">Active Monitoring</div>
-              </div>
-              <div>
-                <div className="text-4xl md:text-5xl font-black mb-2 text-[#ffead6]">&gt;85%</div>
-                <div className="text-sm font-bold text-white/70 uppercase tracking-widest">SVI Precision</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* PANEL 3: MODULES GRID */}
-        <div className="w-full h-full bg-[#fff8f6] flex flex-col justify-center pt-20 pb-4">
-          <div className="max-w-7xl mx-auto px-6 w-full">
-            <div className="flex items-center justify-center gap-4 mb-12">
-              <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#857371]" />
-              <h2 className="text-xl sm:text-2xl font-bold text-[#000666] tracking-widest uppercase">Explore Platform Modules</h2>
-              <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#857371]" />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              
-              <Link href="/dashboard" className="group bg-white p-6 rounded-3xl border border-[#f0e6e4] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col h-full">
-                <div className="w-12 h-12 rounded-xl bg-[#e0e5ff] text-[#000666] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <Activity size={24} />
-                </div>
-                <h3 className="text-xl font-black text-[#000666] mb-3 group-hover:text-[#ba1a1a] transition-colors">Crisis Console</h3>
-                <p className="text-[#534341] text-sm font-medium leading-relaxed mb-6 flex-1">
-                  The central nervous system for operators. View live intercepted calls, SVI scores, and dispatch units instantly.
-                </p>
-                <div className="flex items-center text-[#ba1a1a] font-bold text-xs uppercase tracking-wide">
-                  Access Module <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </Link>
-
-              <Link href="/sanctuary" className="group bg-white p-6 rounded-3xl border border-[#f0e6e4] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col h-full">
-                <div className="w-12 h-12 rounded-xl bg-[#ffead6] text-[#944b00] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <ShieldCheck size={24} />
-                </div>
-                <h3 className="text-xl font-black text-[#000666] mb-3 group-hover:text-[#ba1a1a] transition-colors">Victim Sanctuary</h3>
-                <p className="text-[#534341] text-sm font-medium leading-relaxed mb-6 flex-1">
-                  A secure citizen hub for recording audio e-FIRs, tracking legal aid, and chatting with the SAATHI legal bot.
-                </p>
-                <div className="flex items-center text-[#ba1a1a] font-bold text-xs uppercase tracking-wide">
-                  Access Module <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </Link>
-
-              <Link href="/hotspots" className="group bg-white p-6 rounded-3xl border border-[#f0e6e4] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col h-full">
-                <div className="w-12 h-12 rounded-xl bg-[#ffdad6] text-[#ba1a1a] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <MapPin size={24} />
-                </div>
-                <h3 className="text-xl font-black text-[#000666] mb-3 group-hover:text-[#ba1a1a] transition-colors">KAVACH Hotspots</h3>
-                <p className="text-[#534341] text-sm font-medium leading-relaxed mb-6 flex-1">
-                  Geospatial AI visualization mapping out high-risk zones across districts with a 30-day forecast slider.
-                </p>
-                <div className="flex items-center text-[#ba1a1a] font-bold text-xs uppercase tracking-wide">
-                  Access Module <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </Link>
-
-            </div>
-          </div>
-        </div>
-      </FullPageScroller>
-
+        <a href="https://github.com/abhranilsingharoy-cloud/kisan_seva" target="_blank" style={{ color: "#86efac", fontSize: "0.75rem", fontWeight: 700, whiteSpace: "nowrap" }}>GitHub →</a>
+      </div>
     </div>
   );
 }
+
+export default function HomePage() {
+  return (
+    <>
+    <Suspense><JudgePanel /></Suspense>
+    <FullPageScroller>
+      {/* ── 0. HERO ── */}
+      <div className="w-full h-full marketing-wrapper flex flex-col pt-24 relative overflow-hidden">
+        {/* Text content */}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative w-full flex flex-col items-center pt-12 lg:pt-16 pb-8 z-10">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-slate-900 tracking-tight leading-[1.08] mb-6">
+            Empower your farm, <br /> grow your future
+          </h1>
+          <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto font-normal leading-relaxed mb-9">
+            Track prices, get weather updates, and manage crops all in one place.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/market"
+              className="w-full sm:w-auto bg-transparent text-[#2A854B] font-medium px-8 py-3.5 rounded-full border border-[#2A854B] hover:bg-[#e7f4ec] transition-all text-base shadow-sm"
+            >
+              Monitor Prices
+            </Link>
+            <Link
+              href="/dashboard"
+              className="w-full sm:w-auto bg-[#2A854B] hover:bg-[#226b3c] text-white font-medium px-8 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all text-base"
+            >
+              View Dashboard
+            </Link>
+          </div>
+        </div>
+
+        {/* Illustration — fills remaining height */}
+        <div className="w-full relative flex-1 overflow-hidden flex justify-center z-10">
+          <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-transparent to-transparent z-10 pointer-events-none" />
+          <Image
+            src="/hero-illustration.png"
+            alt="KisanSeva Platform Illustration"
+            width={1200}
+            height={600}
+            className="w-full max-w-5xl h-full object-contain object-bottom mix-blend-darken"
+            priority
+          />
+        </div>
+      </div>
+
+      {/* ── 1. AGRI FEATURES ── */}
+      <div className="w-full h-full bg-slate-50 flex flex-col justify-center pt-28 pb-4">
+        <AgriFeatures />
+      </div>
+
+      {/* ── 2. AGRI IMPACT ── */}
+      <div className="w-full h-full bg-slate-50 flex flex-col justify-center pt-28 pb-4">
+        <AgriImpact />
+      </div>
+
+      {/* ── 3. PILLAR CARDS ── */}
+      <div className="w-full h-full bg-white flex flex-col justify-center pt-28 pb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <ScrollReveal preset="fade-down" className="flex items-center justify-center gap-4 mb-8">
+            <div className="h-px w-16 bg-gradient-to-r from-transparent to-slate-300" />
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-wide text-center">
+              What Do You Need?
+            </h2>
+            <div className="h-px w-16 bg-gradient-to-l from-transparent to-slate-300" />
+          </ScrollReveal>
+          <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" delay={0.1}>
+            <PillarCard
+              id="diagnose"
+              title="Diagnose Crop"
+              description="Snap a photo of your plant. Our AI identifies the disease, severity, and gives you step-by-step treatment in seconds."
+              href="/diagnose"
+              cardStyle="hover:border-blue-300"
+              iconBg="bg-blue-50 text-blue-600 border border-blue-100"
+              hoverColor="group-hover:text-blue-600"
+              badgeColor="bg-blue-50 text-blue-700 border-blue-100"
+              emoji="🔬"
+            />
+            <PillarCard
+              id="market"
+              title="Check Mandi Prices"
+              description="Compare live prices across 500+ mandis nationwide. Find the highest bidder before you load your harvest."
+              href="/market"
+              cardStyle="hover:border-[#65a30d]/40"
+              iconBg="bg-[#65a30d]/10 text-[#65a30d] border border-[#65a30d]/20"
+              hoverColor="group-hover:text-emerald-600"
+              badgeColor="bg-emerald-50 text-emerald-700 border-emerald-100"
+              emoji="📈"
+            />
+            <PillarCard
+              id="schedule"
+              title="Smart Schedule"
+              description="Get personalized irrigation and fertilizer schedules based on live weather, soil data, and your crop stage."
+              href="/schedule"
+              cardStyle="hover:border-amber-300"
+              iconBg="bg-amber-50 text-amber-600 border border-amber-100"
+              hoverColor="group-hover:text-amber-600"
+              badgeColor="bg-amber-50 text-amber-700 border-amber-100"
+              emoji="📅"
+            />
+            <PillarCard
+              id="topography"
+              title="Live AI Maps"
+              description="Explore real-time AI agricultural alerts and crop health across India using our interactive Groq-powered map."
+              href="/topography"
+              cardStyle="hover:border-rose-300"
+              iconBg="bg-rose-50 text-rose-600 border border-rose-100"
+              hoverColor="group-hover:text-rose-600"
+              badgeColor="bg-rose-50 text-rose-700 border-rose-100"
+              emoji="🗺️"
+            />
+            <PillarCard
+              id="soil"
+              title="Soil Health"
+              description="Analyze your soil's macronutrients and receive custom fertilizer recommendations for optimal crop yield."
+              href="/soil-health"
+              cardStyle="hover:border-orange-300"
+              iconBg="bg-orange-50 text-orange-600 border border-orange-100"
+              hoverColor="group-hover:text-orange-600"
+              badgeColor="bg-orange-50 text-orange-700 border-orange-100"
+              emoji="🌱"
+            />
+            <PillarCard
+              id="schemes"
+              title="Govt Schemes"
+              description="Discover official agricultural schemes, apply for subsidies, and learn about financial support available for your farm."
+              href="/govt-schemes"
+              cardStyle="hover:border-cyan-300"
+              iconBg="bg-cyan-50 text-cyan-600 border border-cyan-100"
+              hoverColor="group-hover:text-cyan-600"
+              badgeColor="bg-cyan-50 text-cyan-700 border-cyan-100"
+              emoji="🏛️"
+            />
+          </StaggerReveal>
+        </div>
+      </div>
+
+      {/* ── 4. HOW IT WORKS ── */}
+      <div className="w-full h-full bg-slate-50 flex flex-col justify-center pt-28 pb-4">
+        <HowItWorks />
+      </div>
+
+      {/* ── 5. STATS + TRUST ── */}
+      <div className="w-full h-full bg-white flex flex-col justify-center pt-28 pb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <ScrollReveal preset="fade-left" delay={0} className="lg:col-span-5">
+              <AgriStats />
+            </ScrollReveal>
+            <ScrollReveal preset="fade-right" delay={0.15} className="lg:col-span-7">
+              <AgriTrustStrip />
+            </ScrollReveal>
+          </div>
+        </div>
+      </div>
+
+      {/* ── 6.5. MAP VISUALIZATION ── */}
+      <div className="w-full h-full bg-slate-50 flex flex-col justify-center pt-28 pb-4">
+        <AgriMapVisualization />
+      </div>
+
+      {/* ── 6. FARMER TESTIMONIALS ── */}
+      <div className="w-full h-full bg-white flex flex-col justify-center pt-28 pb-4">
+        <FarmerTestimonials />
+      </div>
+
+      {/* ── 7. FAQ ── */}
+      <div className="w-full h-full bg-slate-50 flex flex-col justify-center pt-28 pb-4">
+        <AgriFAQ />
+      </div>
+
+      {/* ── 8. FOOTER ── */}
+      <div className="w-full h-full bg-white flex flex-col justify-end">
+        <AgriFooter />
+      </div>
+
+    </FullPageScroller>
+      {/* Floating AI Chatbot Widget */}
+
+      {/* Floating Demo Video Widget */}
+      <FloatingDemoVideo />
+    </>
+  );
+}
+
+// ─── Inline PillarCard ─────
+function PillarCard({
+  id, title, description, href, cardStyle, iconBg, hoverColor, badgeColor, emoji,
+}: {
+  id: string; title: string; description: string; href: string;
+  cardStyle: string; iconBg: string; hoverColor: string; badgeColor: string; emoji: string;
+}) {
+  return (
+    <StaggerChild preset="stagger-child-scale">
+      <Link
+        href={href}
+        className={`group p-7 rounded-2xl bg-white border border-slate-200 shadow-sm hover:-translate-y-1.5 hover:shadow-md transition-all duration-300 flex flex-col justify-between h-full ${cardStyle}`}
+      >
+        <div>
+          <div className="flex items-center justify-between mb-5">
+            <div className={`w-14 h-14 rounded-2xl ${iconBg} flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+              {emoji}
+            </div>
+            <div className="p-2 rounded-full bg-slate-50 border border-slate-100 text-slate-400">
+              <ArrowRight className={`w-4 h-4 ${hoverColor} group-hover:translate-x-1 transition-transform duration-300`} />
+            </div>
+          </div>
+          <h3 className={`text-xl font-bold text-slate-900 ${hoverColor} transition-colors duration-300`}>{title}</h3>
+          <p className="text-sm text-slate-500 mt-2 leading-relaxed">{description}</p>
+        </div>
+        <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold">
+          <span className={`px-2.5 py-1 rounded-full border ${badgeColor}`}>Agri Portal</span>
+          <span className="text-slate-400 group-hover:text-slate-600 flex items-center gap-1 transition-colors">
+            Explore <ArrowRight className="w-3.5 h-3.5" />
+          </span>
+        </div>
+      </Link>
+    </StaggerChild>
+  );
+}
+
