@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 const APP_LINKS = [
-  { name: 'Crisis Console', href: '/', icon: LayoutDashboard },
+  { name: 'Crisis Console', href: '/dashboard', icon: LayoutDashboard },
   { name: 'SVI Telemetry', href: '/telemetry', icon: Activity },
   { name: 'KAVACH Hotspots', href: '/hotspots', icon: Map },
   { name: 'Victim Sanctuary', href: '/sanctuary', icon: Shield },
@@ -32,6 +32,10 @@ export default function AppLayoutClient({ children }: { children: React.ReactNod
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
   const pageTitle = APP_LINKS.find(l => l.href === pathname)?.name || 'SAHAYAK-AI';
+
+  if (pathname === '/') {
+    return <>{children}</>;
+  }
 
   return (
     <div className="flex h-screen overflow-hidden text-[#201a19] bg-[#fff8f6] font-sans">
