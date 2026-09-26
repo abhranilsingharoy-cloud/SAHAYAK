@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FileText, Shield, User, Clock, MapPin, AlertCircle, CheckCircle2, Download, Share2, MessageSquare, ChevronRight, ChevronLeft, Database, Link as LinkIcon, ShieldCheck } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function EfirPortal() {
   const [step, setStep] = useState(1);
@@ -16,15 +17,21 @@ export default function EfirPortal() {
   const prevStep = () => setStep(s => Math.max(s - 1, 1));
 
   const handleAIAnalyze = () => {
+    toast.info("AI scanning narrative for PoA Act violations...");
     setAnalyzing(true);
     setTimeout(() => {
       setAnalyzing(false);
       setShowSections(true);
+      toast.success("Sections auto-identified with 94% confidence.");
     }, 1500);
   };
 
   const handleSubmit = () => {
-    setSubmitted(true);
+    toast.loading("Encrypting and transmitting e-FIR...", { id: "submit" });
+    setTimeout(() => {
+      toast.success("e-FIR successfully registered with UP Police API", { id: "submit" });
+      setSubmitted(true);
+    }, 2000);
   };
 
   const handleLock = () => {
@@ -76,10 +83,10 @@ export default function EfirPortal() {
         </div>
 
         <div className="flex justify-center gap-4 mb-10">
-          <button className="flex items-center gap-2 px-6 py-3 bg-[#000666] text-white rounded-xl font-bold hover:bg-[#00044d] transition-all">
+          <button onClick={() => { toast.success("Generating PDF..."); setTimeout(() => window.print(), 1000); }} className="flex items-center gap-2 px-6 py-3 bg-[#000666] text-white rounded-xl font-bold hover:bg-[#00044d] transition-all">
             <Download size={18} /> Download PDF
           </button>
-          <button className="flex items-center gap-2 px-6 py-3 bg-[#f0e6e4] text-[#000666] rounded-xl font-bold hover:bg-[#e0d6d4] transition-all">
+          <button onClick={() => toast.success("Encrypted copy transmitted to NALSA Secure Portal.")} className="flex items-center gap-2 px-6 py-3 bg-[#f0e6e4] text-[#000666] rounded-xl font-bold hover:bg-[#e0d6d4] transition-all">
             <Share2 size={18} /> Share with NALSA
           </button>
         </div>

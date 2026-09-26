@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import AppLayoutShell from './components/AppLayoutShell'
 import SAATHIBot from './components/ui/SAATHIBot'
+import { Toaster } from 'sonner'
+import GlobalSOSListener from './components/ui/GlobalSOSListener'
 
 export const metadata: Metadata = {
   title: {
@@ -27,6 +29,7 @@ export const metadata: Metadata = {
     description: 'AI-powered crisis response for India\'s atrocity helpline',
     images: ['/og-image.png'],
   },
+  manifest: '/manifest.json',
   robots: { index: true, follow: true },
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://sahayak-ai.vercel.app'),
 };
@@ -48,6 +51,8 @@ export default function RootLayout({
           {children}
         </AppLayoutShell>
         <SAATHIBot />
+        <Toaster theme="dark" richColors position="top-right" />
+        <GlobalSOSListener />
       </body>
     </html>
   )

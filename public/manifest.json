@@ -1,0 +1,22 @@
+{
+  "name": "SAHAYAK-AI",
+  "short_name": "SAHAYAK",
+  "description": "AI-powered trauma triage platform for NHAA 14566",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#000666",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/og-image.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/og-image.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

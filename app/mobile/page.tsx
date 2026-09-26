@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { 
   Smartphone, Radio, Shield, MapPin, 
   Phone, ServerCog, Mic, Activity, Clock
@@ -33,6 +34,7 @@ export default function MobilePanic() {
 
   const triggerSOS = () => {
     setSosActive(true);
+    toast.error('SILENT SOS ACTIVATED - Broadcasting location beacon...', { duration: 5000 });
     setActiveScreen(1);
     let c = 5;
     const t = setInterval(() => {
