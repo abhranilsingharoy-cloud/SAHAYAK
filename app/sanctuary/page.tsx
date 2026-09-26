@@ -62,8 +62,8 @@ export default function VictimSanctuary() {
       
       {/* HEADER SECTION */}
       <div className="bg-white rounded-3xl p-8 border border-[#f0e6e4] shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#ffead6] to-transparent rounded-full -mr-20 -mt-20 opacity-60" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-[#e0e5ff] to-transparent rounded-full -ml-16 -mb-16 opacity-60" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-[#ffead6] to-transparent rounded-full -mr-20 -mt-20 opacity-60"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-[#e0e5ff] to-transparent rounded-full -ml-16 -mb-16 opacity-60"></div>
         
         <div className="relative z-10 flex-1">
           <div className="inline-flex items-center gap-2 bg-[#f9f0ee] px-3 py-1.5 rounded-full border border-[#f0e6e4] text-xs font-bold text-[#857371] uppercase tracking-wider mb-4">
@@ -136,12 +136,12 @@ export default function VictimSanctuary() {
                   </div>
                 ) : (
                   <div className="border-2 border-[#ba1a1a]/30 bg-[#ffdad6]/20 rounded-2xl p-6 text-center shadow-inner relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[#ba1a1a]/5 animate-pulse" />
+                    <div className="absolute inset-0 bg-[#ba1a1a]/5 animate-pulse"></div>
                     <div className="relative z-10 flex flex-col items-center gap-3">
                       <div className="text-[#ba1a1a] font-black text-2xl tracking-widest">{formatTime(recordingTime)}</div>
                       <div className="flex gap-1 h-6 items-end justify-center w-full">
                         {Array.from({length: 20}).map((_, i) => (
-                          <div key={i} className="w-1.5 bg-[#ba1a1a] rounded-t-sm animate-pulse" style={{ height: `${Math.random() * 100}%`, animationDuration: `${0.1 + Math.random() * 0.4}s` }} />
+                          <div key={i} className="w-1.5 bg-[#ba1a1a] rounded-t-sm animate-pulse" style={{ height: `${Math.random() * 100}%`, animationDuration: `${0.1 + Math.random() * 0.4}s` }}></div>
                         ))}
                       </div>
                       <button onClick={() => setIsRecording(false)} className="mt-2 bg-[#ba1a1a] text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md flex items-center gap-2 hover:bg-[#93000a] transition-colors">
@@ -173,7 +173,7 @@ export default function VictimSanctuary() {
 
           <div className="flex flex-col gap-6">
             <div className="bg-gradient-to-br from-[#ba1a1a] to-[#93000a] rounded-3xl p-8 text-white shadow-[0_8px_30px_rgba(186,26,26,0.3)] relative overflow-hidden group hover:scale-[1.02] transition-transform duration-300 cursor-pointer">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 group-hover:scale-110 transition-transform duration-700" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 group-hover:scale-110 transition-transform duration-700"></div>
               <ShieldCheck size={32} className="mb-4 text-[#ffdad6]" />
               <h3 className="text-2xl font-black mb-2">In Immediate Danger?</h3>
               <p className="text-white/80 mb-6 font-medium text-sm leading-relaxed">Use the panic button to instantly dispatch local PCR and notify safe-contacts.</p>
@@ -239,7 +239,7 @@ export default function VictimSanctuary() {
                 <span className="w-2 h-2 bg-[#857371] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
               </div>
             )}
-            <div ref={chatEndRef} />
+            <div ref={chatEndRef}></div>
           </div>
           
           <div className="p-4 bg-white border-t border-[#f0e6e4] shrink-0 flex items-center gap-3">
@@ -306,9 +306,9 @@ export default function VictimSanctuary() {
             <div className="mb-6">
               <h5 className="font-bold text-[#ba1a1a] mb-2 text-lg">Alleged Offense (PoA Act Sections)</h5>
               <ul className="bg-white p-4 rounded-xl border border-[#f0e6e4] text-[#201a19] space-y-2 font-medium">
-                <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#ba1a1a]" /> Section 3(1)(r) - Intentional Insult/Humiliation</li>
-                <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#ba1a1a]" /> Section 3(1)(s) - Intimidation</li>
-                <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#ba1a1a]" /> Section 3(2)(va) - Physical Assault</li>
+                <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#ba1a1a]"></div> Section 3(1)(r) - Intentional Insult/Humiliation</li>
+                <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#ba1a1a]"></div> Section 3(1)(s) - Intimidation</li>
+                <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#ba1a1a]"></div> Section 3(2)(va) - Physical Assault</li>
               </ul>
             </div>
             
@@ -329,7 +329,7 @@ export default function VictimSanctuary() {
                 </button>
               </div>
               <div className="bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" /> AI Confidence: 94.3% | PoA Act Compliant | Ready for Filing
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> AI Confidence: 94.3% | PoA Act Compliant | Ready for Filing
               </div>
             </div>
           </div>

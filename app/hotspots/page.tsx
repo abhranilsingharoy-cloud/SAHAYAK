@@ -136,7 +136,7 @@ export default function KavachHotspots() {
                 
                 {/* Mini progress bar */}
                 <div className="w-full h-1.5 bg-[#f0e6e4] rounded-full mt-3 overflow-hidden">
-                  <div className="h-full rounded-full transition-all duration-500" style={{ width: `${zone.svi}%`, backgroundColor: zone.color }} />
+                  <div className="h-full rounded-full transition-all duration-500" style={{ width: `${zone.svi}%`, backgroundColor: zone.color }}></div>
                 </div>
               </button>
             ))}
@@ -150,13 +150,13 @@ export default function KavachHotspots() {
           <div className="flex-1 bg-white rounded-3xl border border-[#f0e6e4] shadow-sm p-3 relative overflow-hidden flex flex-col">
             <div className="absolute top-6 left-6 z-10 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white shadow-md">
               <div className="text-xs font-bold text-[#000666] uppercase tracking-wider flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#ba1a1a] animate-pulse shadow-[0_0_8px_#ba1a1a]" /> Interactive Topology
+                <div className="w-2 h-2 rounded-full bg-[#ba1a1a] animate-pulse shadow-[0_0_8px_#ba1a1a]"></div> Interactive Topology
               </div>
             </div>
             
             <div className="flex-1 rounded-2xl bg-[#00044d] relative flex items-center justify-center overflow-hidden border border-[#000666]">
               {/* Grid Background */}
-              <div className="absolute inset-0 opacity-20 bg-[linear-gradient(#ffffff33_1px,transparent_1px),linear-gradient(90deg,#ffffff33_1px,transparent_1px)] bg-[size:40px_40px]" />
+              <div className="absolute inset-0 opacity-20 bg-[linear-gradient(#ffffff33_1px,transparent_1px),linear-gradient(90deg,#ffffff33_1px,transparent_1px)] bg-[size:40px_40px]"></div>
               
               {/* SVG Topology */}
               <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -186,7 +186,7 @@ export default function KavachHotspots() {
 
           {/* Deep Insight Panel */}
           <div className="h-48 bg-gradient-to-br from-[#000666] to-[#00044d] rounded-3xl shadow-xl p-6 text-white flex items-center relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 group-hover:scale-110 transition-transform duration-700" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 group-hover:scale-110 transition-transform duration-700"></div>
             <div className="relative z-10 flex-1 flex justify-between items-center">
               <div>
                 <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-3 border border-white/10 backdrop-blur-sm">

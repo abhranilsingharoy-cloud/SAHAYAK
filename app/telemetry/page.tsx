@@ -68,7 +68,7 @@ export default function SVITelemetry() {
       
       {/* CRISIS BANNER */}
       <div className="bg-[#ba1a1a] rounded-3xl p-8 text-white shadow-[0_8px_30px_rgba(186,26,26,0.3)] flex flex-col md:flex-row md:items-center justify-between border border-[#ffdad6]/20 relative overflow-hidden gap-6">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0wIDIwaDQwTTIwIDB2NDAiIHN0cm9rZT0icmdiYSgyNTUsIDI1NSwgMjU1LCAwLjA1KSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjwvc3ZnPg==')] opacity-30" />
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0wIDIwaDQwTTIwIDB2NDAiIHN0cm9rZT0icmdiYSgyNTUsIDI1NSwgMjU1LCAwLjA1KSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjwvc3ZnPg==')] opacity-30"></div>
         
         <div className="relative z-10 flex items-center gap-6">
           <div className="w-20 h-20 rounded-2xl bg-white flex items-center justify-center crisis-pulse shrink-0 shadow-lg">
@@ -103,7 +103,7 @@ export default function SVITelemetry() {
                 <Activity size={20} className="text-[#000666]" /> SVI Escalation Trajectory
               </h2>
               <span className="bg-[#ffdad6] text-[#ba1a1a] text-xs font-bold px-3 py-1.5 rounded-full shadow-inner flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#ba1a1a] animate-pulse" /> Live Feed
+                <div className="w-1.5 h-1.5 rounded-full bg-[#ba1a1a] animate-pulse"></div> Live Feed
               </span>
             </div>
             <div className="flex-1 w-full min-h-0">
@@ -158,7 +158,7 @@ export default function SVITelemetry() {
               <div>
                 <div className="text-xs font-bold text-[#857371] uppercase tracking-wider mb-2 flex items-center justify-between">
                   Live Transcript Analysis
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#000666] animate-ping" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#000666] animate-ping"></div>
                 </div>
                 <div className="bg-[#f9f0ee] p-4 rounded-2xl border border-[#f0e6e4] text-sm text-[#201a19] leading-loose font-medium shadow-inner">
                   "It's been three months. <span className="bg-[#ffead6] text-[#944b00] px-1 rounded font-bold">They took everything</span> from the shop. Now they are threatening my family. 
@@ -215,8 +215,7 @@ export default function SVITelemetry() {
                 <div 
                   key={i} 
                   className="w-full bg-[#86efac] rounded-t-sm transition-all duration-100 ease-linear"
-                  style={{ height: `${height}%`, opacity: 0.5 + (height / 200) }}
-                />
+                  style={{ height: `${height}%`, opacity: 0.5 + (height / 200) }}></div>
               ))}
             </div>
             
@@ -231,7 +230,7 @@ export default function SVITelemetry() {
                 <div key={i} className="flex items-center gap-4">
                   <div className="w-48 text-sm font-bold text-[#534341]">{gauge.label}</div>
                   <div className="flex-1 h-3 bg-[#f0e6e4] rounded-full overflow-hidden">
-                    <div className={`h-full ${gauge.color} transition-all duration-500`} style={{ width: `${gauge.val}%` }} />
+                    <div className={`h-full ${gauge.color} transition-all duration-500`} style={{ width: `${gauge.val}%` }}></div>
                   </div>
                   <div className="w-12 text-right text-sm font-black text-[#201a19]">{gauge.val}%</div>
                 </div>
