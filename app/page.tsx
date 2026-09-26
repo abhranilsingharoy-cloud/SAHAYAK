@@ -6,7 +6,7 @@ import AgriFooter from "./components/layout/AgriFooter";
 import FullPageScroller from "./components/ui/FullPageScroller";
 import { ScrollReveal, StaggerReveal, StaggerChild } from "./components/ui/ScrollReveal";
 import Link from "next/link";
-import { ArrowRight, Mic, MapPin, FileText, Zap } from "lucide-react";
+import { ArrowRight, Mic, MapPin, FileText, Zap, Shield } from "lucide-react";
 import AgriMapVisualization from "./components/home/AgriMapVisualization";
 
 export default function HomePage() {
@@ -213,19 +213,47 @@ export default function HomePage() {
          </div>
       </div>
 
-      {/* 6. SIH JUDGE PANEL */}
-      <div className="w-full h-full bg-[#f9f0ee] flex flex-col justify-center py-20">
-         <div className="max-w-6xl mx-auto px-4 w-full flex flex-col md:flex-row items-center gap-12">
-            <div className="md:w-1/3">
-               <h2 className="text-4xl md:text-5xl font-extrabold text-[#000666] leading-tight">Why SAHAYAK<br/>Wins</h2>
-               <div className="w-20 h-2 bg-[#ba1a1a] mt-6"></div>
+      {/* 6. SIH JUDGE PANEL (Bento Grid) */}
+      <div className="w-full h-full bg-[#f9f0ee] flex flex-col justify-center py-20 relative overflow-hidden">
+         {/* Decorative grid background */}
+         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #ba1a1a 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+         
+         <div className="max-w-6xl mx-auto px-4 w-full relative z-10">
+            <div className="text-center mb-12">
+               <span className="inline-block px-4 py-1.5 bg-[#ba1a1a]/10 text-[#ba1a1a] rounded-full text-sm font-bold mb-4 uppercase tracking-wider">SIH 2026 Edge</span>
+               <h2 className="text-4xl md:text-5xl font-extrabold text-[#000666]">Why SAHAYAK Wins</h2>
             </div>
-            <div className="md:w-2/3 grid grid-cols-2 sm:grid-cols-3 gap-4">
-               {['Ministry: DSJ&E', 'PoA Act Compliant', 'DPDP Privacy Safe', 'Whisper v3 ASR', 'GSAP Animations', 'Supabase Backend'].map(badge => (
-                  <div key={badge} className="bg-white py-4 px-2 rounded-xl text-center font-bold text-[#000666] shadow-sm border border-slate-200/60">
-                     {badge}
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[160px]">
+               <div className="md:col-span-2 md:row-span-2 bg-gradient-to-br from-[#000666] to-[#00044d] rounded-3xl p-8 text-white flex flex-col justify-between shadow-lg relative overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:scale-150 transition-transform duration-500"></div>
+                  <div>
+                     <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4"><Zap size={24} className="text-[#ffead6]" /></div>
+                     <h3 className="text-2xl font-bold mb-2">Zero-Touch Dispatch</h3>
+                     <p className="text-white/70">Real-time AI telemetry autonomously alerts emergency services in 420ms when critical stress is detected.</p>
                   </div>
-               ))}
+                  <div className="flex gap-2 mt-4"><span className="px-3 py-1 bg-white/20 rounded-lg text-xs font-bold">14566 Integration</span></div>
+               </div>
+               
+               <div className="md:col-span-2 bg-white rounded-3xl p-6 border border-[#f0e6e4] shadow-sm flex items-center gap-6 hover:shadow-md transition-shadow">
+                  <div className="w-14 h-14 bg-[#ba1a1a]/10 text-[#ba1a1a] rounded-xl flex items-center justify-center shrink-0"><FileText size={28} /></div>
+                  <div>
+                     <h3 className="text-lg font-bold text-[#000666]">PoA Act Compliant e-FIRs</h3>
+                     <p className="text-slate-600 text-sm mt-1">Legally accurate incident reports generated via NLP.</p>
+                  </div>
+               </div>
+               
+               <div className="md:col-span-1 bg-white rounded-3xl p-6 border border-[#f0e6e4] shadow-sm flex flex-col justify-center items-center text-center hover:bg-[#ba1a1a] hover:text-white transition-colors group">
+                  <Shield size={32} className="text-[#000666] mb-3 group-hover:text-white" />
+                  <h3 className="font-bold text-[#000666] group-hover:text-white">DPDP Safe</h3>
+                  <p className="text-xs text-slate-500 mt-2 group-hover:text-white/80">End-to-end encryption</p>
+               </div>
+               
+               <div className="md:col-span-1 bg-white rounded-3xl p-6 border border-[#f0e6e4] shadow-sm flex flex-col justify-center items-center text-center hover:bg-amber-500 hover:text-white transition-colors group">
+                  <MapPin size={32} className="text-amber-600 mb-3 group-hover:text-white" />
+                  <h3 className="font-bold text-[#000666] group-hover:text-white">Predictive AI</h3>
+                  <p className="text-xs text-slate-500 mt-2 group-hover:text-white/80">KAVACH Hotspots</p>
+               </div>
             </div>
          </div>
       </div>
