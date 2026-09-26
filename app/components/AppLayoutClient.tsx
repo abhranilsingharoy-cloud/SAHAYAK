@@ -16,7 +16,8 @@ import {
   Settings,
   ChevronRight,
   LifeBuoy,
-  Navigation
+  Navigation,
+  Network
 } from 'lucide-react';
 
 const APP_LINKS = [
@@ -26,6 +27,7 @@ const APP_LINKS = [
   { name: 'Victim Sanctuary', href: '/sanctuary', icon: Shield },
   { name: 'Mobile Panic', href: '/mobile', icon: Smartphone },
   { name: 'Suraksha Path', href: '/suraksha', icon: Navigation },
+  { name: 'Integrations', href: '/integrations', icon: Network },
 ];
 
 export default function AppLayoutClient({ children }: { children: React.ReactNode }) {
