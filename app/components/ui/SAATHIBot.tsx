@@ -27,7 +27,7 @@ type Message = {
 
 const QUICK_CHIPS = [
   { label: "🆘 Emergency Help", text: "I need immediate police help" },
-  { label: "📄 File e-FIR", text: "Help me file an e-FIR" },
+  { label: "File e-FIR", text: "Help me file an e-FIR" },
   { label: "⚖️ My Legal Rights", text: "What are my legal rights under the SC/ST act?" },
   { label: "🛡️ Safe Route", text: "I need a safe route to escape" },
   { label: "📞 Helpline", text: "What are the emergency helpline numbers?" },
@@ -119,13 +119,13 @@ export default function SAATHIBot() {
       const actions: Message["actions"] = [];
 
       if (lower.includes("efir") || lower.includes("fir") || lower.includes("complaint") || lower.includes("file")) {
-        actions.push({ label: "📄 File e-FIR", href: "/efir", variant: "primary" });
+        actions.push({ label: "File e-FIR", href: "/efir", variant: "primary" });
         actions.push({ label: "NCW Portal", href: "/ncw", variant: "outline" });
       } else if (lower.includes("police") || lower.includes("emergency") || lower.includes("help") || lower.includes("danger")) {
-        actions.push({ label: "🚨 Silent SOS", href: "/mobile", variant: "primary" });
+        actions.push({ label: "Silent SOS", href: "/mobile", variant: "primary" });
         actions.push({ label: "Call 14566", href: "tel:14566", variant: "outline" });
       } else if (lower.includes("route") || lower.includes("safe") || lower.includes("escape")) {
-        actions.push({ label: "🛡️ Suraksha Path", href: "/suraksha", variant: "primary" });
+        actions.push({ label: "Suraksha Path", href: "/suraksha", variant: "primary" });
       } else if (lower.includes("legal") || lower.includes("rights") || lower.includes("act")) {
         actions.push({ label: "Victim Sanctuary", href: "/sanctuary", variant: "outline" });
         actions.push({ label: "Integration Hub", href: "/integrations", variant: "outline" });
@@ -148,7 +148,7 @@ export default function SAATHIBot() {
           sender: "bot",
           text: "I'm having trouble connecting. If you're in danger, **please call 14566 immediately**.",
           time: getTime(),
-          actions: [{ label: "📞 Call 14566", href: "tel:14566", variant: "primary" }],
+          actions: [{ label: "Call 14566", href: "tel:14566", variant: "primary" }],
         },
       ]);
     } finally {
