@@ -90,32 +90,40 @@ function Hero() {
   return (
     <section id="home" className="relative min-h-screen bg-[#050505] flex items-end pb-24 overflow-hidden pt-32">
       {/* Background Layers */}
-      <div className="absolute inset-0 z-0">
-        <svg className="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
-          <motion.path 
-            d="M 200 400 Q 300 100 500 300 T 600 600 Q 400 700 200 400" 
-            fill="none" 
-            stroke="white" 
-            strokeWidth="2"
-            animate={{ opacity: [0.08, 0.12, 0.08] }}
-            transition={{ duration: 4, repeat: Infinity }}
-          />
-        </svg>
-      </div>
-      
       <motion.div 
-        className="absolute left-0 w-full h-[2px] bg-[#ba1a1a] shadow-[0_0_20px_#ba1a1a] z-10"
-        animate={{ top: ['-5%', '105%'] }}
-        transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
-      />
+        style={{ y: useTransform(useScroll().scrollYProgress, [0, 1], ["0%", "50%"]) }} 
+        className="absolute inset-0 z-0"
+      >
+        <div className="absolute inset-0 bg-[#050505]/40 mix-blend-multiply z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-20" />
+        
+        <motion.img 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.6 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          src="/mapBg.png" 
+          alt="Safety Map Background" 
+          className="w-full h-full object-cover grayscale-[100%] contrast-[1.25] brightness-75"
+        />
 
-      <div className="absolute inset-0 z-0" style={{
-        backgroundImage: 'linear-gradient(rgba(186,26,26,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0,6,102,0.08) 1px, transparent 1px)',
-        backgroundSize: '60px 60px'
-      }} />
-      <div className="absolute inset-0 z-0" style={{
-        background: 'radial-gradient(ellipse at 20% 50%, rgba(0,6,102,0.3), transparent 60%)'
-      }} />
+        <motion.div 
+          animate={{ top: ['-10%', '110%'] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
+          className="absolute left-0 w-full h-[2px] bg-[#ba1a1a] shadow-[0_0_20px_#ba1a1a] z-10 opacity-60"
+        />
+      </motion.div>
+
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="absolute inset-0 z-10 opacity-20 pointer-events-none"
+      >
+        <div className="w-full h-full" style={{
+          backgroundImage: 'linear-gradient(rgba(186,26,26,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(186,26,26,0.2) 1px, transparent 1px)',
+          backgroundSize: '80px 80px'
+        }} />
+      </motion.div>
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-6 w-full relative z-20 flex flex-col lg:flex-row items-end justify-between gap-12">
@@ -133,84 +141,91 @@ function Hero() {
             <span className="text-xs font-bold text-white tracking-widest">NHAA SYSTEM ONLINE</span>
           </motion.div>
 
-          <div className="overflow-hidden mb-6">
+          <div className="overflow-hidden mb-4 md:mb-6 pb-2 md:pb-4">
             <motion.h1 
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-7xl md:text-[120px] lg:text-[160px] font-black tracking-tighter leading-[0.85] text-white"
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+              className="text-[4rem] sm:text-[5rem] md:text-[6rem] lg:text-[7rem] xl:text-[9rem] font-black tracking-tighter leading-[0.9] text-white"
+              style={{ fontFamily: "'Noto Sans', sans-serif" }}
             >
-              SAHAYAK<br/><span className="text-[#ba1a1a]">-AI</span>
+              SAHAYAK<span className="text-[#ba1a1a]">AI</span>
             </motion.h1>
           </div>
 
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-xl md:text-2xl text-white/70 max-w-2xl border-l-4 border-[#ba1a1a] pl-6 mb-10"
-          >
-            AI-powered trauma triage for India's National Helpline Against Atrocities — 14566. Protecting the vulnerable. In milliseconds.
-          </motion.p>
+          <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-end">
+            <motion.p 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-base md:text-xl text-white/70 max-w-lg font-light leading-relaxed border-l-2 border-[#ba1a1a]/50 pl-4 md:pl-6"
+            >
+              AI-powered trauma triage for India's National Helpline Against Atrocities — 14566. Protecting the vulnerable. In milliseconds.
+            </motion.p>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="flex flex-wrap items-center gap-6"
-          >
-            <Link href="/dashboard" className="bg-[#ba1a1a] hover:bg-[#a01616] text-white px-8 py-4 rounded-full text-lg font-bold transition-all hover:pr-6 group flex items-center gap-3">
-              Intercept Crisis 
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-            </Link>
-            <Link href="#platform" className="text-white font-medium hover:text-white/80 transition-colors flex items-center gap-2">
-              Explore Platform <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.4, type: "spring" }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link href="/dashboard" className="h-14 md:h-20 px-6 md:px-10 rounded-full bg-[#ba1a1a] text-white hover:bg-[#a01616] font-bold text-base md:text-lg shadow-[0_0_30px_rgba(186,26,26,0.4)] transition-colors duration-500 group flex items-center shrink-0">
+                Intercept Crisis
+                <div className="ml-3 w-8 h-8 md:w-10 md:h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-black/20 transition-colors">
+                  <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+                </div>
+              </Link>
+            </motion.div>
+          </div>
         </div>
 
         {/* Floating Cards (lg+) */}
-        <div className="hidden lg:flex flex-col gap-6 w-80">
-          <motion.div 
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 1 }}
-            className="bg-white/5 border border-white/10 backdrop-blur-xl border-l-4 border-l-[#000666] p-6 rounded-2xl"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-white/60 text-sm font-bold tracking-widest uppercase">Active Cases</span>
-              <div className="flex items-center gap-2 text-xs font-bold text-[#2dd4bf]">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2dd4bf] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2dd4bf]"></span>
-                </span>
-                LIVE MONITORING
+        <motion.div 
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4, duration: 0.6, ease: "easeOut" }}
+          className="hidden lg:flex flex-col gap-6 lg:scale-75 xl:scale-90 2xl:scale-100 lg:origin-bottom-right transition-transform duration-300"
+        >
+          <div className="bg-white/5 border border-white/10 p-6 rounded-3xl w-72 backdrop-blur-2xl border-l-4 border-l-[#000666]">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-[#000666]/20 flex items-center justify-center border border-[#000666]/30">
+                <Shield className="w-6 h-6 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-white">89</div>
+                <div className="text-[10px] text-white/50 uppercase tracking-wider font-bold">Active Cases</div>
               </div>
             </div>
-            <div className="text-6xl font-black text-white">89</div>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 1.2 }}
-            className="bg-white/5 border border-white/10 backdrop-blur-xl border-l-4 border-l-[#ba1a1a] p-6 rounded-2xl"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-white/60 text-sm font-bold tracking-widest uppercase">SVI Score</span>
-              <span className="bg-[#ba1a1a]/20 text-[#ba1a1a] text-xs font-bold px-2 py-1 rounded">CRITICAL</span>
+            <div className="flex items-center gap-2 text-[#2dd4bf] text-[10px] font-mono font-bold tracking-wider">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2dd4bf] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2dd4bf]"></span>
+              </span>
+              LIVE TRACKING
             </div>
-            <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden mb-2">
+          </div>
+
+          <div className="bg-white/5 border border-white/10 p-6 rounded-3xl w-72 backdrop-blur-2xl border-l-4 border-l-[#ba1a1a]">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-xl bg-[#ba1a1a]/20 flex items-center justify-center p-2 border border-[#ba1a1a]/30">
+                <Activity className="w-6 h-6 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-white">Critical</div>
+                <div className="text-[10px] text-white/50 uppercase tracking-wider font-bold">SVI Zone Status</div>
+              </div>
+            </div>
+            <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden flex items-center relative">
               <motion.div 
                 initial={{ width: 0 }}
-                animate={{ width: '91%' }}
-                transition={{ duration: 1.5, delay: 1.5 }}
-                className="h-full bg-[#ba1a1a]"
+                animate={{ width: '94%' }}
+                transition={{ duration: 1.5, delay: 0.6, ease: "circOut" }}
+                className="h-full bg-[#ba1a1a] shadow-[0_0_10px_#ba1a1a]"
               />
             </div>
-            <div className="text-right text-white font-bold">91%</div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
