@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import AppLayoutClient from './components/AppLayoutClient'
+import SAATHIBot from './components/ui/SAATHIBot'
 
 export const metadata: Metadata = {
   title: 'SAHAYAK-AI | National Helpline Against Atrocities (14566)',
@@ -23,6 +24,7 @@ export default function RootLayout({
         <AppLayoutClient>
           {children}
         </AppLayoutClient>
+        <SAATHIBot />
       </body>
     </html>
   )
