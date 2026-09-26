@@ -19,13 +19,15 @@ import {
   Navigation,
   Network,
   FileText,
-  Users
+  Users,
+  PieChart
 } from 'lucide-react';
 
 const APP_LINKS = [
   { name: 'Crisis Console', href: '/dashboard', icon: LayoutDashboard },
   { name: 'SVI Telemetry', href: '/telemetry', icon: Activity },
   { name: 'KAVACH Hotspots', href: '/hotspots', icon: Map },
+  { name: 'Ministry Analytics', href: '/analytics', icon: PieChart },
   { name: 'Victim Sanctuary', href: '/sanctuary', icon: Shield },
   { name: 'Mobile Panic', href: '/mobile', icon: Smartphone },
   { name: 'Suraksha Path', href: '/suraksha', icon: Navigation },
