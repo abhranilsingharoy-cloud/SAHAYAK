@@ -302,6 +302,67 @@ export default function DrishtiBoard() {
         </div>
       </div>
     </div>
+
+    {/* Multi-Agency Dispatch Console */}
+    <div className="mt-6 bg-white rounded-3xl border border-[#f0e6e4] shadow-xl overflow-hidden p-6 relative">
+      <h2 className="text-xl font-bold text-[#000666] mb-6 flex items-center gap-2">
+        <Activity size={24} className="text-[#ba1a1a]" />
+        Zero-Touch Multi-Agency Dispatch
+      </h2>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-[#f9f0ee] rounded-2xl p-5 border border-[#ba1a1a]/30 relative z-10 shadow-sm">
+          <div className="text-xs font-bold text-[#ba1a1a] uppercase tracking-wider flex items-center justify-between mb-3">
+            <span className="flex items-center gap-1.5"><Siren size={16} /> Police (PCR #14)</span>
+          </div>
+          <div className="text-3xl font-black text-[#ba1a1a] mb-1">EN ROUTE</div>
+          <div className="text-sm font-bold text-[#857371] flex items-center gap-2">
+            ETA: 3m 20s
+          </div>
+        </div>
+        
+        <div className="bg-[#f0fdf4] rounded-2xl p-5 border border-green-500/30 relative z-10 shadow-sm">
+          <div className="text-xs font-bold text-green-700 uppercase tracking-wider flex items-center justify-between mb-3">
+            <span className="flex items-center gap-1.5"><Stethoscope size={16} /> Medical (AMB-07)</span>
+          </div>
+          <div className="text-3xl font-black text-green-700 mb-1">DISPATCHED</div>
+          <div className="text-sm font-bold text-[#857371] flex items-center gap-2">
+            ETA: 6m 10s
+          </div>
+        </div>
+        
+        <div className="bg-[#e0e5ff] rounded-2xl p-5 border border-[#000666]/30 relative z-10 shadow-sm">
+          <div className="text-xs font-bold text-[#000666] uppercase tracking-wider flex items-center justify-between mb-3">
+            <span className="flex items-center gap-1.5"><Scale size={16} /> Legal (NALSA)</span>
+          </div>
+          <div className="text-3xl font-black text-[#000666] mb-1">NOTIFIED</div>
+          <div className="text-sm font-bold text-[#857371]">
+            ETA: On arrival
+          </div>
+        </div>
+      </div>
+
+      <div className="relative h-32 mb-6 bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden flex items-end justify-center pb-4">
+        <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+           <line x1="16%" y1="0" x2="50%" y2="80%" stroke="#ba1a1a" strokeWidth="2.5" strokeDasharray="6" className="animate-pulse opacity-60"/>
+           <line x1="50%" y1="0" x2="50%" y2="80%" stroke="#15803d" strokeWidth="2.5" strokeDasharray="6" className="animate-pulse opacity-60"/>
+           <line x1="84%" y1="0" x2="50%" y2="80%" stroke="#000666" strokeWidth="2.5" strokeDasharray="6" className="animate-pulse opacity-60"/>
+        </svg>
+        <div className="relative z-10 bg-white px-5 py-2.5 rounded-full shadow-lg border-2 border-[#ba1a1a]/50 text-sm font-black text-[#ba1a1a] flex items-center gap-2">
+          <MapPin size={16} /> VICTIM LOCATION
+        </div>
+      </div>
+
+      <div className="bg-[#ffead6]/30 rounded-xl p-4 text-xs font-mono text-[#534341] border border-[#ffead6] flex items-start gap-3">
+        <Activity size={16} className="text-[#944b00] shrink-0 mt-0.5" />
+        <div>
+          <span className="text-[#944b00] font-bold">Auto-dispatch trigger log:</span> 
+          <span className="opacity-80"> SVI crossed 90 threshold at 14:32:11 &rarr; Auto-dispatch triggered &rarr; 3 agencies notified in 420ms</span>
+        </div>
+      </div>
+    </div>
+
+    </div>
   );
 }
 
