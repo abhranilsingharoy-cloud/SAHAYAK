@@ -15,7 +15,8 @@ import {
   Search,
   Settings,
   ChevronRight,
-  LifeBuoy
+  LifeBuoy,
+  Navigation
 } from 'lucide-react';
 
 const APP_LINKS = [
@@ -24,6 +25,7 @@ const APP_LINKS = [
   { name: 'KAVACH Hotspots', href: '/hotspots', icon: Map },
   { name: 'Victim Sanctuary', href: '/sanctuary', icon: Shield },
   { name: 'Mobile Panic', href: '/mobile', icon: Smartphone },
+  { name: 'Suraksha Path', href: '/suraksha', icon: Navigation },
 ];
 
 export default function AppLayoutClient({ children }: { children: React.ReactNode }) {

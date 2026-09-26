@@ -10,45 +10,29 @@ type FarmerStory = {
 
 const FARMER_STORIES: FarmerStory[] = [
   {
-    id: "ramesh-patel",
-    name: "Ramesh Patel",
-    quote: "KisanSeva detected early blight on my tomatoes before I could see it. Treated in time and saved my entire harvest.",
-    subtitle: "Tomato Farmer from Nashik, Maharashtra · PM-KISAN beneficiary",
-    initials: "RP",
-    avatarGradient: "from-emerald-400 to-teal-600",
+    id: "dr-meena-gupta",
+    name: "Dr. Meena Gupta",
+    quote: "SAHAYAK reduced our response time from 22 minutes to under 4 minutes.",
+    subtitle: "District Collector",
+    initials: "MG",
+    avatarGradient: "from-blue-400 to-indigo-600",
   },
   {
-    id: "gurpreet-singh",
-    name: "Gurpreet Singh",
-    quote: "I was selling wheat at my local mandi. The app showed me Azadpur was paying ₹300 more per quintal. Now I plan every sale.",
-    subtitle: "Wheat Farmer from Ludhiana, Punjab · Market price user",
-    initials: "GS",
+    id: "rajan-prasad",
+    name: "Rajan Prasad",
+    quote: "The SVI score tells us instantly who needs the fastest help.",
+    subtitle: "PCR Inspector",
+    initials: "RP",
     avatarGradient: "from-amber-400 to-orange-500",
   },
   {
-    id: "anita-devi",
-    name: "Anita Devi",
-    quote: "The irrigation schedule told me to reduce watering before the rains. I saved on both water and electricity that month.",
-    subtitle: "Rice Farmer from Vidisha, MP · Smart schedule user",
+    id: "anjali-devi",
+    name: "Anjali Devi",
+    quote: "The SAATHI bot helped me file my FIR from home. I felt safe.",
+    subtitle: "Survivor, Bundelkhand",
     initials: "AD",
-    avatarGradient: "from-sky-400 to-blue-600",
-  },
-  {
-    id: "krishna-reddy",
-    name: "Krishna Reddy",
-    quote: "Asked the KisanSeva assistant in Telugu about cotton bollworm. Got step-by-step treatment advice in under a minute.",
-    subtitle: "Cotton Farmer from Guntur, Andhra Pradesh · AI assistant user",
-    initials: "KR",
-    avatarGradient: "from-violet-400 to-indigo-600",
-  },
-  {
-    id: "fatima-sheikh",
-    name: "Fatima Sheikh",
-    quote: "I found out I qualified for the Fasal Bima scheme through the app. Filed a claim after unseasonal rains and received ₹45,000.",
-    subtitle: "Onion Farmer from Solapur, Maharashtra · Crop insurance beneficiary",
-    initials: "FS",
-    avatarGradient: "from-teal-400 to-blue-500",
-  },
+    avatarGradient: "from-emerald-400 to-teal-600",
+  }
 ];
 
 const AUTO_SWIPE_MS = 3500;

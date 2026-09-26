@@ -6,14 +6,10 @@ import { ScrollReveal, StaggerReveal, StaggerChild } from "@/app/components/ui/S
 export default function AgriFAQ() {
   const [searchQuery, setSearchQuery] = useState("");
   const faqs = [
-    { question: "How accurate is the crop disease detection?", answer: "Our MobileNetV3 model achieves 91%+ accuracy across 38 plant disease classes from the PlantVillage dataset, including diseases affecting tomato, wheat, rice, cotton, potato, and more." },
-    { question: "How does the Live AI Crop Map get its data?", answer: "Our Live AI Crop Maps use the ultra-fast Groq LPU™ Inference Engine to generate highly realistic, real-time agricultural alerts based on current weather, soil, and regional trends across India." },
-    { question: "How often are mandi prices updated?", answer: "Prices are fetched directly from AGMARKNET (the official government agricultural market data API) and refreshed constantly for real-time accuracy." },
-    { question: "Where can I learn about farming subsidies?", answer: "We have a dedicated Government Schemes page that covers eligibility and application details for PM-KISAN, PMFBY, KCC, and more." },
-    { question: "Is my farm data private and secure?", answer: "Yes. We encrypt all data at rest and in transit. Your land records, crop history, and location are never sold or shared with third parties." },
-    { question: "Which crops and diseases can the AI detect?", answer: "The system covers 38 disease classes across 14 crops. You can browse all covered symptoms and AI treatments in our comprehensive Disease Library." },
-    { question: "Can I use this without internet?", answer: "The disease scanner requires internet for the initial model query. However, previously loaded mandi prices and schedules are cached locally for offline viewing." },
-    { question: "Is there any cost to use KisanSeva?", answer: "No. KisanSeva is completely free for farmers. All features — disease detection, market prices, and live mapping — are available at zero cost." },
+    { question: "What is the SVI (Severity Vulnerability Index)?", answer: "It is a 0-100 score computed from 12 real-time signals including vocal stress, NLP keyword density, caller location risk, and time-of-day patterns." },
+    { question: "How does Suraksha Path work?", answer: "Our AI uses KAVACH hotspot data to dynamically route victims along paths that avoid high-risk zones, police voids, and unlit roads." },
+    { question: "Is caller data encrypted?", answer: "Yes. All audio is processed in-memory and never stored. Transcripts are encrypted at rest using AES-256." },
+    { question: "Which languages are supported?", answer: "Hindi, Bundelkhandi, Bhojpuri, Marathi, Tamil, and Telugu — powered by OpenAI Whisper Large-v3." }
   ];
 
   const [openId, setOpenId] = useState<string | null>(faqs[0].question);
