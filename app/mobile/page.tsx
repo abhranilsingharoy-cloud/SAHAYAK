@@ -44,6 +44,31 @@ export default function MobilePanic() {
     }, 1000);
   };
 
+  const [sosSent, setSosSent] = useState(false);
+  const [whatsappChat, setWhatsappChat] = useState<{role: string, text: string}[]>([]);
+  const [whatsappTyping, setWhatsappTyping] = useState(false);
+
+  const handleSilentSos = () => {
+    setSosSent(true);
+    setTimeout(() => {
+      setWhatsappChat([{ role: 'user', text: '🆘' }]);
+      setWhatsappTyping(true);
+      setTimeout(() => {
+        setWhatsappTyping(false);
+        setWhatsappChat(prev => [
+          ...prev, 
+          { role: 'bot', text: 'SAHAYAK Emergency Detected. Stay calm. Your location has been shared with nearest PCR unit. ETA: 4 minutes. Stay on the line.' }
+        ]);
+        setTimeout(() => {
+          setWhatsappChat(prev => [
+            ...prev,
+            { role: 'bot', text: '[LOCATION PIN SHARED] PCR #14 is on the way.' }
+          ]);
+        }, 1500);
+      }, 1500);
+    }, 1000);
+  };
+
   const pipelineItems = [
     { step: 'Language Identification', detail: 'Hindi (Bundelkhandi dialect)', icon: Mic },
     { step: 'Acoustic Processing', detail: 'RNNoise + WebRTC VAD', icon: Activity },
@@ -53,7 +78,8 @@ export default function MobilePanic() {
   ];
 
   return (
-    <div className="flex flex-col xl:flex-row gap-8 max-w-7xl mx-auto">
+    <div className="flex flex-col gap-12 max-w-7xl mx-auto">
+      <div className="flex flex-col xl:flex-row gap-8">
       
       {/* LEFT COL: Mobile Simulator */}
       <div className="flex-1 flex flex-col items-center">
@@ -292,6 +318,81 @@ export default function MobilePanic() {
                 <div className="text-[10px] text-white/70 font-bold uppercase tracking-widest">ASR Accuracy</div>
                 <div className="font-black text-lg">94.3% <span className="text-xs font-normal opacity-70">Hindi</span></div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* SILENT SOS / WHATSAPP SECTION */}
+      <div className="bg-white rounded-3xl p-8 border border-[#f0e6e4] shadow-sm w-full">
+        <h2 className="text-3xl font-extrabold text-[#201a19] mb-8">Silent SOS & WhatsApp Integration</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Action Trigger */}
+          <div className="flex flex-col items-center justify-center bg-[#fff8f6] p-8 rounded-3xl border border-[#f0e6e4]">
+            {!sosSent ? (
+              <button 
+                onClick={handleSilentSos}
+                className="w-48 h-48 rounded-full bg-[#ba1a1a] shadow-[0_0_30px_rgba(186,26,26,0.4)] flex flex-col items-center justify-center text-white hover:scale-105 transition-all active:scale-95 group relative"
+              >
+                <div className="absolute inset-0 rounded-full border-4 border-[#ba1a1a]/30 animate-ping" />
+                <Activity size={48} className="mb-2 group-hover:animate-bounce" />
+                <span className="font-black text-xl">SILENT SOS</span>
+              </button>
+            ) : (
+              <div className="flex flex-col items-center justify-center animate-in zoom-in duration-500">
+                <div className="w-24 h-24 rounded-full bg-green-500 flex items-center justify-center text-white shadow-lg mb-6">
+                  <Shield size={40} />
+                </div>
+                <h3 className="text-2xl font-black text-green-700 mb-2">SOS Sent!</h3>
+                <p className="text-center font-medium text-[#201a19] mb-4">
+                  Location shared with PCR #14 and District Control Room
+                </p>
+                <div className="bg-white border border-[#f0e6e4] p-4 rounded-xl shadow-sm text-sm">
+                  <div className="font-bold text-[#ba1a1a] flex items-center gap-2 mb-2">
+                    <Activity size={16} /> WhatsApp Message Sent
+                  </div>
+                  <p className="text-[#534341] italic">"EMERGENCY: I need help. Location: [GPS coordinates]. Please send help immediately."</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* WhatsApp Simulator */}
+          <div className="bg-[#efeae2] rounded-3xl border border-[#f0e6e4] shadow-sm flex flex-col h-[500px] overflow-hidden">
+            <div className="bg-[#00a884] p-4 text-white flex items-center gap-4 shrink-0 shadow-sm z-10">
+              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center border-2 border-white/50">
+                <Shield size={20} />
+              </div>
+              <div>
+                <h3 className="font-bold">SAHAYAK Bot</h3>
+                <div className="text-xs text-white/80">Official Emergency Account</div>
+              </div>
+            </div>
+            
+            <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-4 bg-[url('https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/message-circle.svg')] bg-opacity-5">
+              <div className="self-center bg-[#ffeebd] text-[#534341] text-xs py-1 px-3 rounded-lg shadow-sm font-medium mb-2">
+                Today
+              </div>
+              
+              {whatsappChat.map((msg, idx) => (
+                <div key={idx} className={`max-w-[80%] p-3 rounded-xl shadow-sm relative ${
+                  msg.role === 'bot' 
+                    ? 'self-start bg-white text-[#201a19] rounded-tl-none' 
+                    : 'self-end bg-[#d9fdd3] text-[#201a19] rounded-tr-none'
+                }`}>
+                  <p className="font-medium text-sm whitespace-pre-wrap">{msg.text}</p>
+                  <div className="text-[10px] text-[#857371] text-right mt-1">Now</div>
+                </div>
+              ))}
+              
+              {whatsappTyping && (
+                <div className="self-start bg-white p-3 rounded-xl rounded-tl-none shadow-sm flex gap-1 items-center h-10">
+                  <span className="w-2 h-2 bg-[#857371] rounded-full animate-bounce" />
+                  <span className="w-2 h-2 bg-[#857371] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                  <span className="w-2 h-2 bg-[#857371] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
+                </div>
+              )}
             </div>
           </div>
         </div>

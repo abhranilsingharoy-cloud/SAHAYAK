@@ -23,6 +23,14 @@ export default function SVITelemetry() {
     "> CONNECTED TO STREAM: CALLER #4821",
     "> AUDIO STRESS DETECTED (CONF: 0.94)"
   ]);
+  const [waveformBars, setWaveformBars] = useState<number[]>(Array(40).fill(50));
+
+  useEffect(() => {
+    const wInterval = setInterval(() => {
+      setWaveformBars(Array.from({ length: 40 }, () => Math.random() * 100));
+    }, 100);
+    return () => clearInterval(wInterval);
+  }, []);
   
   // Simulate live telemetry and NLP logs
   useEffect(() => {
@@ -193,6 +201,64 @@ export default function SVITelemetry() {
           
         </div>
       </div>
+
+      {/* Acoustic Biomarker Section */}
+      <div className="mt-8 bg-white rounded-3xl p-8 border border-[#f0e6e4] shadow-sm">
+        <h2 className="text-3xl font-extrabold text-[#000666] mb-6 flex items-center gap-3">
+          <Activity size={32} className="text-[#ba1a1a]" /> Live Acoustic Biomarker Engine
+        </h2>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div>
+            <div className="bg-[#201a19] rounded-2xl p-6 h-48 flex items-end gap-1 mb-6 border border-[#534341] overflow-hidden">
+              {waveformBars.map((height, i) => (
+                <div 
+                  key={i} 
+                  className="w-full bg-[#86efac] rounded-t-sm transition-all duration-100 ease-linear"
+                  style={{ height: `${height}%`, opacity: 0.5 + (height / 200) }}
+                />
+              ))}
+            </div>
+            
+            <div className="flex flex-col gap-4">
+              {[
+                { label: 'Vocal Tremor', val: 78, color: 'bg-red-500' },
+                { label: 'Speech Rate Anomaly', val: 62, color: 'bg-orange-500' },
+                { label: 'Cry/Sob Detection', val: 45, color: 'bg-amber-500' },
+                { label: 'Voice Pitch Deviation', val: 83, color: 'bg-red-500' },
+                { label: 'Silence Gaps (Fear indicator)', val: 55, color: 'bg-orange-500' },
+              ].map((gauge, i) => (
+                <div key={i} className="flex items-center gap-4">
+                  <div className="w-48 text-sm font-bold text-[#534341]">{gauge.label}</div>
+                  <div className="flex-1 h-3 bg-[#f0e6e4] rounded-full overflow-hidden">
+                    <div className={`h-full ${gauge.color} transition-all duration-500`} style={{ width: `${gauge.val}%` }} />
+                  </div>
+                  <div className="w-12 text-right text-sm font-black text-[#201a19]">{gauge.val}%</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="flex flex-col justify-center items-center p-8 bg-[#fff8f6] rounded-3xl border border-[#f0e6e4]">
+            <div className="bg-[#ba1a1a] text-white px-6 py-3 rounded-full font-black text-xl shadow-[0_0_20px_rgba(186,26,26,0.5)] animate-pulse mb-8 flex items-center gap-2">
+              <AlertOctagon size={24} /> BIOMARKER VERDICT: HIGH DISTRESS DETECTED — SVI Escalated to 91
+            </div>
+            
+            <div className="flex flex-wrap gap-4 justify-center">
+              <span className="bg-white border border-[#f0e6e4] text-[#000666] px-4 py-2 rounded-xl font-bold shadow-sm flex items-center gap-2">
+                <Activity size={16} className="text-[#ba1a1a]" /> Crying Detected
+              </span>
+              <span className="bg-white border border-[#f0e6e4] text-[#000666] px-4 py-2 rounded-xl font-bold shadow-sm flex items-center gap-2">
+                <Activity size={16} className="text-[#ba1a1a]" /> Trembling Voice
+              </span>
+              <span className="bg-white border border-[#f0e6e4] text-[#000666] px-4 py-2 rounded-xl font-bold shadow-sm flex items-center gap-2">
+                <Activity size={16} className="text-[#ba1a1a]" /> Elevated Pitch
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
