@@ -45,7 +45,7 @@ export default function DrishtiBoard() {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  return (
+  return (<>
     <div className="flex flex-col xl:flex-row gap-6">
       
       {/* LEFT COLUMN: Feed & KPIs */}
@@ -361,8 +361,6 @@ export default function DrishtiBoard() {
         </div>
       </div>
     </div>
-
-    </div>
-  );
+  </>);
 }
 
