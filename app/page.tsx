@@ -100,8 +100,8 @@ function Navbar() {
 // === SECTION 2: HERO ===
 function Hero() {
   return (
-    <section id="home" className="relative min-h-screen bg-[#050505] flex items-end justify-center pb-0 overflow-hidden pt-32">
-      {/* Background Layers - Aurora Glow instead of RakshaMarg map */}
+    <section id="home" className="relative min-h-screen bg-[#050505] flex flex-col items-center justify-end pb-0 overflow-hidden pt-32">
+      {/* Background Layers - Aurora Glow */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <motion.div 
           animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
@@ -114,71 +114,118 @@ function Hero() {
           className="absolute top-[20%] right-[10%] w-[50vw] h-[50vw] bg-[#000666]/40 blur-[140px] rounded-full mix-blend-screen"
         />
         <div className="absolute inset-0 bg-[#050505]/60 backdrop-blur-[1px]" />
-        
-        {/* Subtle grid to keep it techy */}
         <div className="absolute inset-0 z-10 opacity-20 pointer-events-none" style={{
           backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
           backgroundSize: '80px 80px'
         }} />
       </div>
 
-      {/* Content - Center Aligned */}
-      <div className="max-w-7xl mx-auto px-6 w-full relative z-20 flex flex-col items-center text-center mt-10">
+      <div className="max-w-7xl mx-auto px-6 w-full relative z-20 flex flex-col items-center">
         
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 bg-white/5 border border-white/10 backdrop-blur-md px-5 py-2 rounded-full w-fit mb-8 shadow-xl"
-        >
-          <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10b981]" />
-          <span className="text-xs font-bold text-white tracking-widest uppercase">MINISTRY OF SOCIAL JUSTICE INITIATIVE</span>
-        </motion.div>
+        {/* Content - 2 Column Layout with India Map on Right */}
+        <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-12 mt-10">
+          
+          {/* Left Column - Text Content */}
+          <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left z-30">
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-2 bg-white/5 border border-white/10 backdrop-blur-md px-5 py-2 rounded-full w-fit mb-8 shadow-xl"
+            >
+              <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10b981]" />
+              <span className="text-xs font-bold text-white tracking-widest uppercase">MINISTRY OF SOCIAL JUSTICE INITIATIVE</span>
+            </motion.div>
 
-        <div className="overflow-hidden mb-6 pb-2">
-          <motion.h1 
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="text-[4rem] sm:text-[5rem] md:text-[7rem] lg:text-[8rem] font-black tracking-tighter leading-[0.9] text-white font-sans"
+            <div className="overflow-hidden mb-6 pb-2">
+              <motion.h1 
+                initial={{ y: '100%' }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className="text-[4rem] sm:text-[5rem] md:text-[6rem] lg:text-[6.5rem] xl:text-[7.5rem] font-black tracking-tighter leading-[0.9] text-white font-sans"
+              >
+                Intercept Crisis.<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-[#ba1a1a]">
+                  Protect Rights.
+                </span>
+              </motion.h1>
+            </div>
+
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="text-lg md:text-xl text-white/70 max-w-2xl font-light leading-relaxed mb-10"
+            >
+              AI-powered trauma triage for India's National Helpline Against Atrocities — 14566. 
+              Reacting in milliseconds, so you don't have to wait for help.
+            </motion.p>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="flex flex-col sm:flex-row items-center gap-6"
+            >
+              <Link href="/dashboard" className="h-14 px-8 rounded-full bg-white text-[#050505] hover:bg-gray-200 font-black text-lg shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all duration-300 flex items-center group">
+                Access Console
+                <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-2 transition-transform" />
+              </Link>
+              <Link href="/suraksha" className="h-14 px-8 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 font-bold text-lg transition-all duration-300 flex items-center gap-3 backdrop-blur-md">
+                Explore Suraksha Path
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Right Column - Glowing India Map */}
+          <motion.div 
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="flex-1 hidden lg:flex justify-center items-center relative h-[500px] w-full"
+            style={{ perspective: "1000px" }}
           >
-            Intercept Crisis.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-[#ba1a1a]">
-              Protect Rights.
-            </span>
-          </motion.h1>
+            <div className="absolute inset-0 bg-[#000666]/30 blur-[100px] rounded-full mix-blend-screen" />
+            
+            <motion.div 
+              animate={{ rotateY: [0, 5, 0], rotateX: [5, 10, 5] }}
+              transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+              className="relative w-full h-full flex items-center justify-center"
+              style={{ transformStyle: 'preserve-3d' }}
+            >
+              <img 
+                src="/mapBg.png" 
+                alt="India Network Map" 
+                className="w-full h-full object-contain grayscale opacity-60 mix-blend-screen contrast-150"
+                style={{ filter: 'drop-shadow(0 0 20px rgba(0,6,102,0.8))' }}
+              />
+
+              {/* Glowing Action Nodes overlaid on the map */}
+              <div className="absolute top-[40%] left-[45%] flex items-center justify-center">
+                <div className="w-4 h-4 bg-[#ba1a1a] rounded-full animate-ping absolute" />
+                <div className="w-2 h-2 bg-white rounded-full relative z-10 shadow-[0_0_10px_white]" />
+              </div>
+              <div className="absolute top-[60%] left-[35%] flex items-center justify-center">
+                <div className="w-4 h-4 bg-[#2dd4bf] rounded-full animate-ping absolute" style={{ animationDelay: '0.5s' }} />
+                <div className="w-2 h-2 bg-white rounded-full relative z-10 shadow-[0_0_10px_white]" />
+              </div>
+              <div className="absolute top-[30%] left-[60%] flex items-center justify-center">
+                <div className="w-4 h-4 bg-amber-500 rounded-full animate-ping absolute" style={{ animationDelay: '1s' }} />
+                <div className="w-2 h-2 bg-white rounded-full relative z-10 shadow-[0_0_10px_white]" />
+              </div>
+              
+              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40">
+                <path d="M 45% 40% L 35% 60% L 60% 30% Z" fill="none" stroke="#2dd4bf" strokeWidth="1" strokeDasharray="4 4" className="animate-pulse" />
+              </svg>
+            </motion.div>
+          </motion.div>
         </div>
 
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="text-lg md:text-2xl text-white/70 max-w-3xl font-light leading-relaxed mb-10"
-        >
-          AI-powered trauma triage for India's National Helpline Against Atrocities — 14566. 
-          Reacting in milliseconds, so you don't have to wait for help.
-        </motion.p>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="flex flex-col sm:flex-row items-center gap-6 z-30"
-        >
-          <Link href="/dashboard" className="h-16 px-10 rounded-full bg-white text-[#050505] hover:bg-gray-200 font-black text-lg shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all duration-300 flex items-center group">
-            Access Console
-            <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-2 transition-transform" />
-          </Link>
-          <Link href="/suraksha" className="h-16 px-10 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 font-bold text-lg transition-all duration-300 flex items-center gap-3 backdrop-blur-md">
-            Explore Suraksha Path
-          </Link>
-        </motion.div>
-
-        {/* Dashboard Preview Dock */}
+        {/* Dashboard Preview Dock (Properly nested inside max-w-7xl) */}
         <motion.div
           initial={{ opacity: 0, y: 100 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6, type: 'spring', bounce: 0.3 }}
-          className="mt-16 w-full max-w-5xl bg-gradient-to-b from-white/10 to-transparent border-t border-x border-white/20 rounded-t-[2.5rem] p-8 pb-12 relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-8 backdrop-blur-2xl"
+          className="mt-12 lg:mt-16 w-full max-w-5xl bg-gradient-to-b from-white/10 to-transparent border-t border-x border-white/20 rounded-t-[2.5rem] p-8 pb-12 relative overflow-hidden flex flex-col md:flex-row justify-between items-center gap-8 backdrop-blur-2xl"
         >
            <div className="absolute inset-0 bg-[#000666]/20 mix-blend-overlay" />
            <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left">
