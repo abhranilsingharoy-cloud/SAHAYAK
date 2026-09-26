@@ -79,8 +79,10 @@ export default function SAATHIBot() {
         <div className="mb-4 w-80 sm:w-96 bg-[#fff8f6] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-[#000666]/10 transform transition-all">
           {/* Header */}
           <div className="bg-[#000666] text-white p-4 flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <Bot size={24} className="text-[#fff8f6]" />
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                <img src="/saathi_bot.png" alt="SAATHI Bot" className="w-6 h-6 object-contain" />
+              </div>
               <h3 className="font-semibold text-[#fff8f6]">SAATHI AI Assistant</h3>
             </div>
             <button
@@ -99,6 +101,11 @@ export default function SAATHIBot() {
                 key={msg.id}
                 className={`mb-4 flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
+                {msg.sender === 'bot' && (
+                  <div className="w-6 h-6 rounded-full bg-white flex-shrink-0 mr-2 mt-1 flex items-center justify-center overflow-hidden border border-[#000666]/20">
+                    <img src="/saathi_bot.png" alt="SAATHI Bot" className="w-4 h-4 object-contain" />
+                  </div>
+                )}
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-2 ${
                     msg.sender === 'user'
@@ -135,6 +142,9 @@ export default function SAATHIBot() {
             
             {isTyping && (
               <div className="flex justify-start mb-4">
+                <div className="w-6 h-6 rounded-full bg-white flex-shrink-0 mr-2 mt-1 flex items-center justify-center overflow-hidden border border-[#000666]/20">
+                  <img src="/saathi_bot.png" alt="SAATHI Bot" className="w-4 h-4 object-contain" />
+                </div>
                 <div className="bg-white border border-[#000666]/10 text-gray-800 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm flex gap-1">
                   <div className="w-2 h-2 bg-[#000666]/40 rounded-full animate-bounce"></div>
                   <div className="w-2 h-2 bg-[#000666]/40 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
@@ -190,7 +200,7 @@ export default function SAATHIBot() {
         >
           {/* Pulse effect */}
           <span className="absolute inset-0 rounded-full bg-[#ba1a1a] animate-ping opacity-75"></span>
-          <Bot size={28} className="relative z-10" />
+          <img src="/saathi_bot.png" alt="SAATHI Bot" className="relative z-10 w-7 h-7 object-contain drop-shadow-md filter brightness-0 invert" />
         </button>
       )}
     </div>
