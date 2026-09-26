@@ -239,20 +239,41 @@ export default function SVITelemetry() {
           </div>
           
           <div className="flex flex-col justify-center items-center p-8 bg-[#fff8f6] rounded-3xl border border-[#f0e6e4]">
-            <div className="bg-[#ba1a1a] text-white px-6 py-3 rounded-full font-black text-xl shadow-[0_0_20px_rgba(186,26,26,0.5)] animate-pulse mb-8 flex items-center gap-2">
-              <AlertOctagon size={24} /> BIOMARKER VERDICT: HIGH DISTRESS DETECTED — SVI Escalated to 91
-            </div>
-            
-            <div className="flex flex-wrap gap-4 justify-center">
-              <span className="bg-white border border-[#f0e6e4] text-[#000666] px-4 py-2 rounded-xl font-bold shadow-sm flex items-center gap-2">
-                <Activity size={16} className="text-[#ba1a1a]" /> Crying Detected
-              </span>
-              <span className="bg-white border border-[#f0e6e4] text-[#000666] px-4 py-2 rounded-xl font-bold shadow-sm flex items-center gap-2">
-                <Activity size={16} className="text-[#ba1a1a]" /> Trembling Voice
-              </span>
-              <span className="bg-white border border-[#f0e6e4] text-[#000666] px-4 py-2 rounded-xl font-bold shadow-sm flex items-center gap-2">
-                <Activity size={16} className="text-[#ba1a1a]" /> Elevated Pitch
-              </span>
+            <button 
+              onClick={async () => {
+                const btn = document.getElementById('analyze-btn');
+                if (btn) btn.innerText = 'ANALYZING...';
+                try {
+                  const res = await fetch('/api/svi', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ transcript: "It's been three months. They took everything from the shop. Now they are threatening my family. I can't take this anymore, it's better if I just end it. No one is helping us.", language: "en" })
+                  });
+                  const data = await res.json();
+                  const resultsDiv = document.getElementById('svi-results');
+                  if (resultsDiv) {
+                    resultsDiv.innerHTML = `
+                      <div class="bg-[#ba1a1a] text-white px-6 py-3 rounded-full font-black text-xl shadow-[0_0_20px_rgba(186,26,26,0.5)] flex items-center gap-2 mb-4">
+                        BIOMARKER VERDICT: ${data.urgency} DISTRESS DETECTED — SVI: ${data.svi}
+                      </div>
+                      <div class="text-[#000666] font-bold mb-4 text-center">Sentiment: ${data.sentiment}</div>
+                      <div class="flex flex-wrap gap-2 justify-center">
+                        ${data.tags.map((tag: string) => `<span class="bg-white border border-[#f0e6e4] text-[#000666] px-4 py-2 rounded-xl font-bold shadow-sm flex items-center gap-2">${tag}</span>`).join('')}
+                      </div>
+                    `;
+                  }
+                } catch(e) { console.error(e); }
+                if (btn) btn.innerText = 'ANALYZE TRANSCRIPT';
+              }}
+              id="analyze-btn"
+              className="bg-[#000666] text-white px-8 py-4 rounded-xl font-black mb-8 hover:bg-[#00044d] transition-colors w-full"
+            >
+              ANALYZE TRANSCRIPT
+            </button>
+            <div id="svi-results" className="w-full">
+              <div className="bg-[#ba1a1a] text-white px-6 py-3 rounded-full font-black text-xl shadow-[0_0_20px_rgba(186,26,26,0.5)] animate-pulse mb-8 flex items-center gap-2 text-center justify-center">
+                <AlertOctagon size={24} /> AWAITING ANALYSIS...
+              </div>
             </div>
           </div>
         </div>

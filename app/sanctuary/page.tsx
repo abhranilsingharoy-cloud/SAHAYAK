@@ -271,18 +271,71 @@ export default function VictimSanctuary() {
         <div className="bg-white rounded-3xl p-8 border border-[#f0e6e4] shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
           <p className="text-[#534341] font-medium mb-4">Simulate your voice recording or type your incident description below:</p>
           <textarea 
+            id="efir-input"
             rows={4} 
             className="w-full bg-[#f9f0ee] p-4 rounded-xl border border-[#f0e6e4] outline-none focus:border-[#000666]/30 focus:ring-2 focus:ring-[#000666]/10 transition-all resize-none font-medium text-[#201a19] mb-4" 
             defaultValue="My landlord threatened me with caste slurs and physically pushed me on 24th September 2026 at around 8pm near the market in Bundelkhand District..."
           />
           <button 
-            onClick={() => {
+            onClick={async () => {
               const btn = document.getElementById('draft-btn');
+              const textarea = document.getElementById('efir-input') as HTMLTextAreaElement;
               if (btn) btn.innerHTML = 'Analyzing...';
-              setTimeout(() => {
-                document.getElementById('efir-result')?.classList.remove('hidden');
-                if (btn) btn.innerHTML = 'ANALYZE & DRAFT e-FIR';
-              }, 2000);
+              try {
+                const res = await fetch('/api/efir', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ incident: textarea?.value || '', complainant: 'Anonymous User', location: 'Bundelkhand District' })
+                });
+                const data = await res.json();
+                
+                const resultDiv = document.getElementById('efir-result');
+                if (resultDiv) {
+                  resultDiv.classList.remove('hidden');
+                  
+                  const sectionsHtml = data.sections.map((s: any) => 
+                    `<li class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-[#ba1a1a]"></div> Section ${s.section} - ${s.description}</li>`
+                  ).join('');
+
+                  resultDiv.innerHTML = `
+                    <div class="text-center mb-6 border-b border-[#f0e6e4] pb-6">
+                      <h3 class="text-2xl font-black text-[#000666] uppercase">Government of India</h3>
+                      <h4 class="text-xl font-bold text-[#201a19]">FIRST INFORMATION REPORT</h4>
+                      <p class="text-sm font-medium text-[#534341] mt-2">FIR No: ${data.firNumber}</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                      <h5 class="font-bold text-[#ba1a1a] mb-2 text-lg">Alleged Offense (PoA Act Sections)</h5>
+                      <ul class="bg-white p-4 rounded-xl border border-[#f0e6e4] text-[#201a19] space-y-2 font-medium">
+                        ${sectionsHtml}
+                      </ul>
+                    </div>
+                    
+                    <div class="mb-8">
+                      <h5 class="font-bold text-[#000666] mb-2 text-lg">Incident Narrative</h5>
+                      <p class="bg-white p-4 rounded-xl border border-[#f0e6e4] text-[#201a19] italic font-serif leading-relaxed">
+                        "${data.narrative}"
+                      </p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
+                      <div class="flex gap-3 w-full sm:w-auto">
+                        <button onclick="window.print()" class="bg-white border border-[#f0e6e4] text-[#000666] py-2 px-4 rounded-lg font-bold shadow-sm hover:bg-[#f9f0ee] transition-colors flex items-center gap-2">
+                          🖨️ Print e-FIR
+                        </button>
+                        <button class="bg-[#000666] text-white py-2 px-4 rounded-lg font-bold shadow-md hover:bg-[#00044d] transition-colors flex items-center gap-2">
+                          📤 Send to Police Station
+                        </button>
+                      </div>
+                      <div class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> AI Confidence: ${data.confidence}% | PoA Act Compliant | Ready for Filing
+                      </div>
+                    </div>
+                  `;
+                }
+              } catch(e) { console.error(e); }
+              
+              if (btn) btn.innerHTML = 'ANALYZE & DRAFT e-FIR';
             }} 
             id="draft-btn"
             className="bg-[#ba1a1a] hover:bg-[#93000a] text-white py-3 px-6 rounded-xl font-bold text-lg transition-all shadow-md flex items-center justify-center gap-2"
@@ -291,47 +344,7 @@ export default function VictimSanctuary() {
           </button>
           
           <div id="efir-result" className="hidden mt-8 border border-[#f0e6e4] bg-[#fff8f6] rounded-2xl p-8 shadow-sm">
-            <div className="text-center mb-6 border-b border-[#f0e6e4] pb-6">
-              <ShieldCheck size={48} className="mx-auto mb-2 text-[#000666]" />
-              <h3 className="text-2xl font-black text-[#000666] uppercase">Government of India</h3>
-              <h4 className="text-xl font-bold text-[#201a19]">FIRST INFORMATION REPORT</h4>
-              <p className="text-sm font-medium text-[#534341] mt-2">FIR No: NHAA/2026/04821</p>
-            </div>
-            
-            <div className="mb-6">
-              <h5 className="font-bold text-[#000666] mb-2 text-lg">Complainant Details</h5>
-              <p className="text-[#201a19] bg-white p-4 rounded-xl border border-[#f0e6e4]">Auto-filled from verified user profile.</p>
-            </div>
-            
-            <div className="mb-6">
-              <h5 className="font-bold text-[#ba1a1a] mb-2 text-lg">Alleged Offense (PoA Act Sections)</h5>
-              <ul className="bg-white p-4 rounded-xl border border-[#f0e6e4] text-[#201a19] space-y-2 font-medium">
-                <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#ba1a1a]"></div> Section 3(1)(r) - Intentional Insult/Humiliation</li>
-                <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#ba1a1a]"></div> Section 3(1)(s) - Intimidation</li>
-                <li className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#ba1a1a]"></div> Section 3(2)(va) - Physical Assault</li>
-              </ul>
-            </div>
-            
-            <div className="mb-8">
-              <h5 className="font-bold text-[#000666] mb-2 text-lg">Incident Narrative</h5>
-              <p className="bg-white p-4 rounded-xl border border-[#f0e6e4] text-[#201a19] italic font-serif leading-relaxed">
-                "It is submitted that on 24th September 2026, at approximately 20:00 hours, near the market area in Bundelkhand District, the accused (landlord) engaged in an unprovoked altercation. The accused intentionally insulted the complainant using derogatory caste slurs with the intent to humiliate in a place within public view, and further committed physical assault by pushing the complainant."
-              </p>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-              <div className="flex gap-3 w-full sm:w-auto">
-                <button onClick={() => window.print()} className="bg-white border border-[#f0e6e4] text-[#000666] py-2 px-4 rounded-lg font-bold shadow-sm hover:bg-[#f9f0ee] transition-colors flex items-center gap-2">
-                  🖨️ Print e-FIR
-                </button>
-                <button className="bg-[#000666] text-white py-2 px-4 rounded-lg font-bold shadow-md hover:bg-[#00044d] transition-colors flex items-center gap-2">
-                  📤 Send to Police Station
-                </button>
-              </div>
-              <div className="bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div> AI Confidence: 94.3% | PoA Act Compliant | Ready for Filing
-              </div>
-            </div>
+            <div className="text-center">Generating...</div>
           </div>
         </div>
       </div>

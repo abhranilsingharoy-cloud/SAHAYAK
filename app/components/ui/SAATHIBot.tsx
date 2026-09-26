@@ -53,23 +53,38 @@ export default function SAATHIBot() {
     }, 1500);
   };
 
-  const handleBotResponse = (userText: string) => {
-    const textLower = userText.toLowerCase();
-    let botMsg: Message = { id: Date.now().toString(), sender: 'bot', text: '' };
+  const handleBotResponse = async (userText: string) => {
+    try {
+      const response = await fetch('/api/saathi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userText, context: 'NHAA helpline assistant' })
+      });
+      
+      const data = await response.json();
+      
+      let botMsg: Message = { id: Date.now().toString(), sender: 'bot', text: data.reply };
+      
+      const textLower = userText.toLowerCase();
+      if (textLower.includes('e-fir') || textLower.includes('efir') || (data.suggestedActions && data.suggestedActions.includes('File e-FIR'))) {
+        botMsg.isAction = true;
+        botMsg.actionType = 'efir';
+      } else if (textLower.includes('police') || textLower.includes('immediate') || textLower.includes('help') || (data.suggestedActions && data.suggestedActions.includes('Call 14566'))) {
+        botMsg.isAction = true;
+        botMsg.actionType = 'police';
+      }
 
-    if (textLower.includes('e-fir') || textLower.includes('efir')) {
-      botMsg.text = 'I can help you file an e-FIR. Click the button below to start the process.';
-      botMsg.isAction = true;
-      botMsg.actionType = 'efir';
-    } else if (textLower.includes('police') || textLower.includes('immediate') || textLower.includes('help')) {
-      botMsg.text = 'If you are in immediate danger, please contact the police immediately!';
-      botMsg.isAction = true;
-      botMsg.actionType = 'police';
-    } else {
-      botMsg.text = 'I am here to assist you with legal rights, filing an e-FIR, or emergency contacts. Please let me know how I can help.';
+      setMessages((prev) => [...prev, botMsg]);
+    } catch (error) {
+      console.error("SAATHI API Error", error);
+      setMessages((prev) => [...prev, {
+        id: Date.now().toString(),
+        sender: 'bot',
+        text: 'Sorry, I am having trouble connecting. Please call 14566 immediately.',
+        isAction: true,
+        actionType: 'police'
+      }]);
     }
-
-    setMessages((prev) => [...prev, botMsg]);
   };
 
   return (
