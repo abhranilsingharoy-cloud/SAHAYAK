@@ -199,23 +199,30 @@ function Hero() {
                 style={{ filter: 'drop-shadow(0 0 20px rgba(0,6,102,0.8))' }}
               />
 
-              {/* Glowing Action Nodes overlaid on the map */}
-              <div className="absolute top-[40%] left-[45%] flex items-center justify-center">
-                <div className="w-4 h-4 bg-[#ba1a1a] rounded-full animate-ping absolute" />
-                <div className="w-2 h-2 bg-white rounded-full relative z-10 shadow-[0_0_10px_white]" />
-              </div>
-              <div className="absolute top-[60%] left-[35%] flex items-center justify-center">
-                <div className="w-4 h-4 bg-[#2dd4bf] rounded-full animate-ping absolute" style={{ animationDelay: '0.5s' }} />
-                <div className="w-2 h-2 bg-white rounded-full relative z-10 shadow-[0_0_10px_white]" />
-              </div>
-              <div className="absolute top-[30%] left-[60%] flex items-center justify-center">
-                <div className="w-4 h-4 bg-amber-500 rounded-full animate-ping absolute" style={{ animationDelay: '1s' }} />
-                <div className="w-2 h-2 bg-white rounded-full relative z-10 shadow-[0_0_10px_white]" />
-              </div>
-              
-              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40">
-                <path d="M 45% 40% L 35% 60% L 60% 30% Z" fill="none" stroke="#2dd4bf" strokeWidth="1" strokeDasharray="4 4" className="animate-pulse" />
-              </svg>
+              {/* Realistic Data Nodes Cluster */}
+              {[
+                { top: '38%', left: '44%', color: '#ba1a1a', label: 'UP-94', alert: true },
+                { top: '56%', left: '38%', color: '#2dd4bf', label: 'MH-12' },
+                { top: '48%', left: '54%', color: '#f59e0b', label: 'WB-45', alert: true },
+                { top: '65%', left: '42%', color: '#2dd4bf' },
+                { top: '46%', left: '48%', color: '#2dd4bf' },
+                { top: '32%', left: '41%', color: '#f59e0b' },
+                { top: '75%', left: '45%', color: '#2dd4bf' },
+              ].map((node, i) => (
+                <div key={i} className="absolute flex flex-col items-center justify-center" style={{ top: node.top, left: node.left }}>
+                  <div className="relative flex items-center justify-center">
+                    {node.alert && (
+                      <div className="w-6 h-6 absolute rounded-full animate-ping opacity-75" style={{ backgroundColor: node.color }} />
+                    )}
+                    <div className="w-2.5 h-2.5 rounded-full relative z-10" style={{ backgroundColor: node.color, boxShadow: `0 0 12px ${node.color}` }} />
+                  </div>
+                  {node.label && (
+                    <div className="absolute top-4 left-3 bg-[#050505]/80 backdrop-blur-md border border-white/10 text-[9px] font-mono font-bold text-white px-2 py-0.5 rounded shadow-xl tracking-widest z-20">
+                      {node.label}
+                    </div>
+                  )}
+                </div>
+              ))}
             </motion.div>
           </motion.div>
         </div>
