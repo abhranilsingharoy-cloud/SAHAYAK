@@ -80,7 +80,10 @@ export default function MapClient() {
   /* ── Load India GeoJSON ── */
   useEffect(() => {
     fetch("/india-states.json")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error("Could not fetch india-states.json");
+        return r.json();
+      })
       .then((data) => {
         data.features = data.features.map((f: any) => ({
           ...f,
