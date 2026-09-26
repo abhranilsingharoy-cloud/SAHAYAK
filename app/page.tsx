@@ -1,325 +1,670 @@
-"use client";
+'use client';
 
-import FarmerTestimonials from "./components/home/FarmerTestimonials";
-import AgriFAQ from "./components/home/AgriFAQ";
-import AgriFooter from "./components/layout/AgriFooter";
-import FullPageScroller from "./components/ui/FullPageScroller";
-import { ScrollReveal, StaggerReveal, StaggerChild } from "./components/ui/ScrollReveal";
-import Link from "next/link";
-import { ArrowRight, Mic, MapPin, FileText, Zap, Shield } from "lucide-react";
-import AgriMapVisualization from "./components/home/AgriMapVisualization";
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import Link from 'next/link';
+import { 
+  Shield, AlertTriangle, Clock, MapPin, FileX, 
+  PhoneIncoming, Mic, Activity, Zap, ArrowRight, Menu, X, ArrowUpRight
+} from 'lucide-react';
 
-export default function HomePage() {
+// === SECTION 1: NAVBAR ===
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <FullPageScroller>
-      {/* 1. HERO PANEL */}
-      <div className="w-full h-full bg-[#00044d] text-white flex flex-col pt-24 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative w-full flex flex-col items-center justify-center flex-1 z-10 pb-16">
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.08] mb-6">
-            Protect the Vulnerable.<br/>
-            <span className="text-[#ba1a1a]">Intercept Crisis.</span><br/>
-            In Milliseconds.
-          </h1>
-          <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto font-normal leading-relaxed mb-9">
-            NHAA 14566 Trauma Triage Platform
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/dashboard"
-              className="w-full sm:w-auto bg-[#ba1a1a] hover:bg-[#8a1212] text-white font-medium px-8 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all text-base"
-            >
-              Access Live Dashboard
+    <>
+      <motion.nav 
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#050505]/90 backdrop-blur-xl border-b border-white/10 py-4' : 'bg-transparent py-6'}`}
+      >
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 z-50">
+            <Shield className="text-[#ba1a1a] w-8 h-8" />
+            <span className="font-bold text-2xl tracking-tighter text-white">
+              SAHAYAK<span className="text-[#ba1a1a]">-AI</span>
+            </span>
+          </Link>
+
+          <div className="hidden md:flex items-center gap-8">
+            {['Home', 'Platform', 'Suraksha Path', 'How It Works', 'Crisis Console'].map((item) => (
+              <Link key={item} href={`#${item.toLowerCase().replace(/ /g, '-')}`} className="text-sm font-medium text-white/70 hover:text-white transition-colors">
+                {item}
+              </Link>
+            ))}
+          </div>
+
+          <div className="hidden md:flex items-center gap-4">
+            <Link href="tel:14566" className="bg-[#ba1a1a] hover:bg-[#a01616] text-white px-6 py-2.5 rounded-full text-sm font-bold transition-colors flex items-center gap-2">
+              <PhoneIncoming className="w-4 h-4" /> Call 14566
             </Link>
-            <Link
-              href="/suraksha"
-              className="w-full sm:w-auto bg-transparent text-[#ffead6] font-medium px-8 py-3.5 rounded-full border border-[#ffead6] hover:bg-white/10 transition-all text-base shadow-sm"
-            >
-              Explore Suraksha Path
+            <Link href="/dashboard" className="bg-[#000666] hover:bg-[#000444] text-white px-6 py-2.5 rounded-full text-sm font-bold transition-colors">
+              Access Dashboard
             </Link>
           </div>
+
+          <button className="md:hidden text-white z-50" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X /> : <Menu />}
+          </button>
         </div>
-        {/* Live status bar */}
-        <div className="absolute bottom-0 left-0 right-0 bg-[#000666]/80 backdrop-blur-md border-t border-white/10 p-3 flex justify-center">
-          <div className="flex items-center gap-4 text-sm font-semibold text-white/90">
-            <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> 🟢 Secure Channel Active</span>
-            <span className="opacity-50">|</span>
-            <span>14 Calls in Queue</span>
-            <span className="opacity-50">|</span>
-            <span>SVI Avg: 67</span>
-            <span className="opacity-50">|</span>
-            <span className="text-[#ba1a1a]">3 Critical Cases</span>
-          </div>
-        </div>
-      </div>
+      </motion.nav>
 
-      {/* 2. PLATFORM ARCHITECTURE PANEL */}
-      <div className="w-full h-full bg-[#fff8f6] flex flex-col justify-center pt-20 pb-4">
-         <div className="max-w-7xl mx-auto px-4 w-full">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-[#000666]">Platform Architecture</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#f0e6e4] flex items-start gap-4">
-                  <div className="p-4 bg-[#ffdad6] rounded-xl text-[#ba1a1a]"><Mic size={32} /></div>
-                  <div>
-                    <h3 className="text-xl font-bold text-[#000666] mb-2">Acoustic Biomarker AI</h3>
-                    <p className="text-slate-600">Detects fear & vocal stress in 420ms. No words needed.</p>
-                  </div>
-               </div>
-               <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#f0e6e4] flex items-start gap-4">
-                  <div className="p-4 bg-[#000666]/10 rounded-xl text-[#000666]"><MapPin size={32} /></div>
-                  <div>
-                    <h3 className="text-xl font-bold text-[#000666] mb-2">Suraksha Path Routing</h3>
-                    <p className="text-slate-600">AI routes victims away from KAVACH threat zones to safety.</p>
-                  </div>
-               </div>
-               <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#f0e6e4] flex items-start gap-4">
-                  <div className="p-4 bg-amber-100 rounded-xl text-amber-600"><FileText size={32} /></div>
-                  <div>
-                    <h3 className="text-xl font-bold text-[#000666] mb-2">Auto e-FIR Drafting</h3>
-                    <p className="text-slate-600">Legally accurate FIRs under PoA Act generated in one click.</p>
-                  </div>
-               </div>
-               <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#f0e6e4] flex items-start gap-4">
-                  <div className="p-4 bg-green-100 rounded-xl text-green-600"><Zap size={32} /></div>
-                  <div>
-                    <h3 className="text-xl font-bold text-[#000666] mb-2">Zero-Touch Dispatch</h3>
-                    <p className="text-slate-600">Autonomously alerts Police, NALSA & Ambulance when SVI &gt; 90.</p>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-
-      {/* 3. IMPACT METRICS PANEL */}
-      <div className="w-full h-full bg-[#000666] flex flex-col justify-center text-white py-20">
-         <div className="max-w-7xl mx-auto px-4 w-full">
-            <h2 className="text-3xl font-bold text-center mb-16 text-[#ffead6]">System Performance</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-               <div>
-                  <div className="text-5xl font-extrabold text-[#ba1a1a] mb-2">420ms</div>
-                  <div className="text-white/70 font-semibold uppercase tracking-wide">Triage Latency</div>
-               </div>
-               <div>
-                  <div className="text-5xl font-extrabold text-[#ba1a1a] mb-2">94.3%</div>
-                  <div className="text-white/70 font-semibold uppercase tracking-wide">ASR Accuracy (Whisper v3)</div>
-               </div>
-               <div>
-                  <div className="text-5xl font-extrabold text-[#ba1a1a] mb-2">28 States</div>
-                  <div className="text-white/70 font-semibold uppercase tracking-wide">Coverage</div>
-               </div>
-               <div>
-                  <div className="text-5xl font-extrabold text-[#ba1a1a] mb-2">89%</div>
-                  <div className="text-white/70 font-semibold uppercase tracking-wide">FIR Auto-Draft Precision</div>
-               </div>
-            </div>
-         </div>
-      </div>
-
-      {/* 4. PILLAR CARDS PANEL */}
-      <div className="w-full h-full bg-[#fff8f6] flex flex-col justify-center pt-28 pb-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <ScrollReveal preset="fade-down" className="flex items-center justify-center gap-4 mb-8">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-slate-300" />
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-wide text-center">
-              What Does This Platform Do?
-            </h2>
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-slate-300" />
-          </ScrollReveal>
-          <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" delay={0.1}>
-            <PillarCard
-              title="Crisis Console"
-              description="Live call intercept, SVI scoring, and operator triage interface"
-              href="/dashboard"
-              iconBg="bg-red-50 text-red-600 border border-red-100"
-              hoverColor="group-hover:text-red-600"
-              badgeColor="bg-red-50 text-red-700 border-red-100"
-              emoji="🚨"
-            />
-            <PillarCard
-              title="KAVACH Hotspots"
-              description="Predictive geospatial threat mapping with 30-day AI forecast"
-              href="/hotspots"
-              iconBg="bg-orange-50 text-orange-600 border border-orange-100"
-              hoverColor="group-hover:text-orange-600"
-              badgeColor="bg-orange-50 text-orange-700 border-orange-100"
-              emoji="🗺️"
-            />
-            <PillarCard
-              title="Victim Sanctuary"
-              description="Secure e-FIR filing, legal bot (SAATHI), and case tracking"
-              href="/sanctuary"
-              iconBg="bg-blue-50 text-blue-600 border border-blue-100"
-              hoverColor="group-hover:text-blue-600"
-              badgeColor="bg-blue-50 text-blue-700 border-blue-100"
-              emoji="🛡️"
-            />
-            <PillarCard
-              title="Suraksha Path"
-              description="AI-powered safe route navigation away from threat zones"
-              href="/suraksha"
-              iconBg="bg-indigo-50 text-indigo-600 border border-indigo-100"
-              hoverColor="group-hover:text-indigo-600"
-              badgeColor="bg-indigo-50 text-indigo-700 border-indigo-100"
-              emoji="🧭"
-            />
-            <PillarCard
-              title="SVI Telemetry"
-              description="Real-time NLP transcript analysis and vulnerability indexing"
-              href="/telemetry"
-              iconBg="bg-teal-50 text-teal-600 border border-teal-100"
-              hoverColor="group-hover:text-teal-600"
-              badgeColor="bg-teal-50 text-teal-700 border-teal-100"
-              emoji="📊"
-            />
-            <PillarCard
-              title="Mobile Panic"
-              description="Silent SOS, IVRS panic system, and WhatsApp integration"
-              href="/mobile"
-              iconBg="bg-rose-50 text-rose-600 border border-rose-100"
-              hoverColor="group-hover:text-rose-600"
-              badgeColor="bg-rose-50 text-rose-700 border-rose-100"
-              emoji="📱"
-            />
-          </StaggerReveal>
-        </div>
-      </div>
-
-      {/* 5. HOW IT WORKS PANEL */}
-      <div className="w-full h-full bg-white flex flex-col justify-center pt-28 pb-4">
-         <div className="max-w-5xl mx-auto px-4 w-full">
-            <h2 className="text-3xl font-bold text-center text-[#000666] mb-12">How It Works</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 relative">
-               <div className="absolute top-1/2 left-0 right-0 h-1 bg-slate-100 -z-10 hidden sm:block"></div>
-               <div className="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm relative">
-                  <div className="w-12 h-12 bg-[#000666] text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-white shadow-sm">1</div>
-                  <h3 className="font-bold text-lg mb-2">Call Intercepted</h3>
-                  <p className="text-slate-600 text-sm">Caller dials 14566. SAHAYAK-AI instantly joins the call.</p>
-               </div>
-               <div className="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm relative">
-                  <div className="w-12 h-12 bg-[#000666] text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-white shadow-sm">2</div>
-                  <h3 className="font-bold text-lg mb-2">Biomarker Analysis</h3>
-                  <p className="text-slate-600 text-sm">Voice stress, dialect, and keywords processed in &lt;500ms.</p>
-               </div>
-               <div className="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm relative">
-                  <div className="w-12 h-12 bg-[#000666] text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-white shadow-sm">3</div>
-                  <h3 className="font-bold text-lg mb-2">SVI Computed</h3>
-                  <p className="text-slate-600 text-sm">Severity Vulnerability Index scored 0-100 using 12 signals.</p>
-               </div>
-               <div className="bg-white p-6 rounded-2xl border border-slate-200 text-center shadow-sm relative">
-                  <div className="w-12 h-12 bg-[#ba1a1a] text-white rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4 border-4 border-white shadow-sm">4</div>
-                  <h3 className="font-bold text-lg mb-2">Zero-Touch Response</h3>
-                  <p className="text-slate-600 text-sm">If SVI&gt;90, Police/NALSA/Hospital alerted autonomously.</p>
-               </div>
-            </div>
-         </div>
-      </div>
-
-      {/* 6. SIH JUDGE PANEL (Bento Grid) */}
-      <div className="w-full h-full bg-[#f9f0ee] flex flex-col justify-center py-20 relative overflow-hidden">
-         {/* Decorative grid background */}
-         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #ba1a1a 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-         
-         <div className="max-w-6xl mx-auto px-4 w-full relative z-10">
-            <div className="text-center mb-12">
-               <span className="inline-block px-4 py-1.5 bg-[#ba1a1a]/10 text-[#ba1a1a] rounded-full text-sm font-bold mb-4 uppercase tracking-wider">SIH 2026 Edge</span>
-               <h2 className="text-4xl md:text-5xl font-extrabold text-[#000666]">Why SAHAYAK Wins</h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[160px]">
-               <div className="md:col-span-2 md:row-span-2 bg-gradient-to-br from-[#000666] to-[#00044d] rounded-3xl p-8 text-white flex flex-col justify-between shadow-lg relative overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 group-hover:scale-150 transition-transform duration-500"></div>
-                  <div>
-                     <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4"><Zap size={24} className="text-[#ffead6]" /></div>
-                     <h3 className="text-2xl font-bold mb-2">Zero-Touch Dispatch</h3>
-                     <p className="text-white/70">Real-time AI telemetry autonomously alerts emergency services in 420ms when critical stress is detected.</p>
-                  </div>
-                  <div className="flex gap-2 mt-4"><span className="px-3 py-1 bg-white/20 rounded-lg text-xs font-bold">14566 Integration</span></div>
-               </div>
-               
-               <div className="md:col-span-2 bg-white rounded-3xl p-6 border border-[#f0e6e4] shadow-sm flex items-center gap-6 hover:shadow-md transition-shadow">
-                  <div className="w-14 h-14 bg-[#ba1a1a]/10 text-[#ba1a1a] rounded-xl flex items-center justify-center shrink-0"><FileText size={28} /></div>
-                  <div>
-                     <h3 className="text-lg font-bold text-[#000666]">PoA Act Compliant e-FIRs</h3>
-                     <p className="text-slate-600 text-sm mt-1">Legally accurate incident reports generated via NLP.</p>
-                  </div>
-               </div>
-               
-               <div className="md:col-span-1 bg-white rounded-3xl p-6 border border-[#f0e6e4] shadow-sm flex flex-col justify-center items-center text-center hover:bg-[#ba1a1a] hover:text-white transition-colors group">
-                  <Shield size={32} className="text-[#000666] mb-3 group-hover:text-white" />
-                  <h3 className="font-bold text-[#000666] group-hover:text-white">DPDP Safe</h3>
-                  <p className="text-xs text-slate-500 mt-2 group-hover:text-white/80">End-to-end encryption</p>
-               </div>
-               
-               <div className="md:col-span-1 bg-white rounded-3xl p-6 border border-[#f0e6e4] shadow-sm flex flex-col justify-center items-center text-center hover:bg-amber-500 hover:text-white transition-colors group">
-                  <MapPin size={32} className="text-amber-600 mb-3 group-hover:text-white" />
-                  <h3 className="font-bold text-[#000666] group-hover:text-white">Predictive AI</h3>
-                  <p className="text-xs text-slate-500 mt-2 group-hover:text-white/80">KAVACH Hotspots</p>
-               </div>
-            </div>
-         </div>
-      </div>
-
-      {/* 7. MAP VISUALIZATION PANEL */}
-      <div className="w-full h-full bg-white flex flex-col justify-center pt-28 pb-4 relative">
-         <div className="text-center mb-4 shrink-0 z-10 relative">
-           <h2 className="text-3xl font-bold text-[#000666]">KAVACH Hotspot Intelligence</h2>
-           <p className="text-slate-600 mt-2">Real-time atrocity incident density across 28 Indian states.</p>
-         </div>
-         <div className="flex-1 min-h-0">
-            <AgriMapVisualization />
-         </div>
-      </div>
-
-      {/* 8. TESTIMONIALS PANEL */}
-      <div className="w-full h-full bg-[#fff8f6] flex flex-col justify-center">
-        <FarmerTestimonials />
-      </div>
-
-      {/* 9. FAQ PANEL */}
-      <div className="w-full h-full bg-white flex flex-col justify-center">
-        <AgriFAQ />
-      </div>
-
-      {/* 10. FOOTER PANEL */}
-      <div className="w-full h-full bg-[#00044d] flex flex-col justify-end">
-        <AgriFooter />
-      </div>
-
-    </FullPageScroller>
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-[#050505] z-40 flex flex-col items-center justify-center gap-8"
+          >
+            {['Home', 'Platform', 'Suraksha Path', 'How It Works', 'Crisis Console'].map((item) => (
+              <Link 
+                key={item} 
+                href={`#${item.toLowerCase().replace(/ /g, '-')}`} 
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-2xl font-bold text-white hover:text-[#ba1a1a] transition-colors"
+              >
+                {item}
+              </Link>
+            ))}
+            <Link href="tel:14566" className="bg-[#ba1a1a] text-white px-8 py-4 rounded-full text-lg font-bold w-64 text-center mt-4">
+              Call 14566
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
-// ─── Inline PillarCard ─────
-function PillarCard({
-  title, description, href, iconBg, hoverColor, badgeColor, emoji,
-}: {
-  title: string; description: string; href: string;
-  iconBg: string; hoverColor: string; badgeColor: string; emoji: string;
-}) {
+// === SECTION 2: HERO ===
+function Hero() {
   return (
-    <StaggerChild preset="stagger-child-scale">
-      <Link
-        href={href}
-        className={`group p-7 rounded-2xl bg-white border border-slate-200 shadow-sm hover:-translate-y-1.5 hover:shadow-md transition-all duration-300 flex flex-col justify-between h-full`}
-      >
-        <div>
-          <div className="flex items-center justify-between mb-5">
-            <div className={`w-14 h-14 rounded-2xl ${iconBg} flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform duration-300`}>
-              {emoji}
+    <section id="home" className="relative min-h-screen bg-[#050505] flex items-end pb-24 overflow-hidden pt-32">
+      {/* Background Layers */}
+      <div className="absolute inset-0 z-0">
+        <svg className="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+          <motion.path 
+            d="M 200 400 Q 300 100 500 300 T 600 600 Q 400 700 200 400" 
+            fill="none" 
+            stroke="white" 
+            strokeWidth="2"
+            animate={{ opacity: [0.08, 0.12, 0.08] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+        </svg>
+      </div>
+      
+      <motion.div 
+        className="absolute left-0 w-full h-[2px] bg-[#ba1a1a] shadow-[0_0_20px_#ba1a1a] z-10"
+        animate={{ top: ['-5%', '105%'] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+      />
+
+      <div className="absolute inset-0 z-0" style={{
+        backgroundImage: 'linear-gradient(rgba(186,26,26,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0,6,102,0.08) 1px, transparent 1px)',
+        backgroundSize: '60px 60px'
+      }} />
+      <div className="absolute inset-0 z-0" style={{
+        background: 'radial-gradient(ellipse at 20% 50%, rgba(0,6,102,0.3), transparent 60%)'
+      }} />
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-6 w-full relative z-20 flex flex-col lg:flex-row items-end justify-between gap-12">
+        <div className="flex-1 max-w-4xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-2 bg-white/5 border border-white/10 backdrop-blur-md px-4 py-1.5 rounded-full w-fit mb-8"
+          >
+            <motion.div 
+              animate={{ opacity: [1, 0.5, 1] }} 
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="w-2.5 h-2.5 bg-green-500 rounded-full"
+            />
+            <span className="text-xs font-bold text-white tracking-widest">NHAA SYSTEM ONLINE</span>
+          </motion.div>
+
+          <div className="overflow-hidden mb-6">
+            <motion.h1 
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="text-7xl md:text-[120px] lg:text-[160px] font-black tracking-tighter leading-[0.85] text-white"
+            >
+              SAHAYAK<br/><span className="text-[#ba1a1a]">-AI</span>
+            </motion.h1>
+          </div>
+
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="text-xl md:text-2xl text-white/70 max-w-2xl border-l-4 border-[#ba1a1a] pl-6 mb-10"
+          >
+            AI-powered trauma triage for India's National Helpline Against Atrocities — 14566. Protecting the vulnerable. In milliseconds.
+          </motion.p>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            className="flex flex-wrap items-center gap-6"
+          >
+            <Link href="/dashboard" className="bg-[#ba1a1a] hover:bg-[#a01616] text-white px-8 py-4 rounded-full text-lg font-bold transition-all hover:pr-6 group flex items-center gap-3">
+              Intercept Crisis 
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+            </Link>
+            <Link href="#platform" className="text-white font-medium hover:text-white/80 transition-colors flex items-center gap-2">
+              Explore Platform <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* Floating Cards (lg+) */}
+        <div className="hidden lg:flex flex-col gap-6 w-80">
+          <motion.div 
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1 }}
+            className="bg-white/5 border border-white/10 backdrop-blur-xl border-l-4 border-l-[#000666] p-6 rounded-2xl"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-white/60 text-sm font-bold tracking-widest uppercase">Active Cases</span>
+              <div className="flex items-center gap-2 text-xs font-bold text-[#2dd4bf]">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2dd4bf] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2dd4bf]"></span>
+                </span>
+                LIVE MONITORING
+              </div>
             </div>
-            <div className="p-2 rounded-full bg-slate-50 border border-slate-100 text-slate-400">
-              <ArrowRight className={`w-4 h-4 ${hoverColor} group-hover:translate-x-1 transition-transform duration-300`} />
+            <div className="text-6xl font-black text-white">89</div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1.2 }}
+            className="bg-white/5 border border-white/10 backdrop-blur-xl border-l-4 border-l-[#ba1a1a] p-6 rounded-2xl"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-white/60 text-sm font-bold tracking-widest uppercase">SVI Score</span>
+              <span className="bg-[#ba1a1a]/20 text-[#ba1a1a] text-xs font-bold px-2 py-1 rounded">CRITICAL</span>
+            </div>
+            <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden mb-2">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: '91%' }}
+                transition={{ duration: 1.5, delay: 1.5 }}
+                className="h-full bg-[#ba1a1a]"
+              />
+            </div>
+            <div className="text-right text-white font-bold">91%</div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// === SECTION 3: PROBLEM SECTION ===
+function ProblemSection() {
+  const problems = [
+    { icon: <AlertTriangle className="w-8 h-8 text-[#ba1a1a]" />, stat: "145,000+ Cases/Year", desc: "SC/ST atrocity cases go unreported due to fear and systemic barriers" },
+    { icon: <Clock className="w-8 h-8 text-amber-500" />, stat: "22 Min Avg Response", desc: "Victims wait 22 minutes on average before any crisis response is initiated" },
+    { icon: <MapPin className="w-8 h-8 text-[#2dd4bf]" />, stat: "28 States Affected", desc: "Atrocity incidents span every corner of India, concentrated in 8 critical states" },
+    { icon: <FileX className="w-8 h-8 text-orange-500" />, stat: "67% FIRs Rejected", desc: "Over two-thirds of atrocity FIR attempts are denied at police stations" }
+  ];
+
+  return (
+    <section className="min-h-screen bg-[#0a0f1e] py-32 relative flex flex-col justify-center">
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          className="mb-20"
+        >
+          <h2 className="text-5xl md:text-7xl font-bold text-white tracking-tight mb-6">The Reality of Atrocities in India</h2>
+          <p className="text-xl text-white/60 max-w-2xl">Why every second matters when vulnerability meets violence.</p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {problems.map((p, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ delay: i * 0.1 }}
+              className="bg-white/5 border border-white/10 rounded-2xl p-10 hover:-translate-y-2 transition-transform duration-300 group"
+            >
+              <div className="mb-6 p-4 rounded-xl bg-white/5 w-fit group-hover:scale-110 transition-transform">
+                {p.icon}
+              </div>
+              <h3 className="text-3xl font-bold text-white mb-4">{p.stat}</h3>
+              <p className="text-lg text-white/70 leading-relaxed">{p.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// === SECTION 4: HOW IT WORKS ===
+function HowItWorksSection() {
+  const targetRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: targetRef });
+  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-65%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+
+  const steps = [
+    { num: '01', icon: <PhoneIncoming />, title: 'Call Intercepted', desc: 'Caller dials 14566. SAHAYAK-AI instantly joins the call and begins biomarker analysis.' },
+    { num: '02', icon: <Mic />, title: 'Biomarker Scan', desc: 'Voice stress, dialect mapping, and cry detection processed in under 500ms using Whisper v3.' },
+    { num: '03', icon: <Activity />, title: 'SVI Computed', desc: 'Severity Vulnerability Index (0-100) calculated from 12 real-time signals including location risk and time patterns.' },
+    { num: '04', icon: <Zap />, title: 'Zero-Touch Dispatch', desc: 'If SVI > 90, Police, NALSA, and Ambulance are autonomously alerted. No operator needed.' }
+  ];
+
+  return (
+    <section ref={targetRef} className="h-[300vh] bg-[#050505] relative" id="how-it-works">
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+        
+        <motion.div style={{ opacity }} className="absolute left-6 md:left-24 top-1/3 z-20 pointer-events-none">
+          <p className="text-[#ba1a1a] font-mono text-sm tracking-widest mb-4">SYSTEM_PROCESS</p>
+          <h2 className="text-6xl md:text-8xl font-bold text-white leading-tight mb-8">How<br/>SAHAYAK<br/>Works</h2>
+          <div className="flex items-center gap-4 text-white/50">
+            <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center animate-bounce">
+              <ArrowRight className="w-4 h-4 rotate-90" />
+            </div>
+            <span className="text-sm font-medium uppercase tracking-widest">Scroll Down</span>
+          </div>
+        </motion.div>
+
+        <motion.div style={{ x }} className="flex gap-8 pl-[100vw] md:pl-[50vw] pr-[20vw]">
+          {steps.map((step, i) => (
+            <div key={i} className="w-[340px] md:w-[380px] h-[500px] shrink-0 bg-white/5 border border-white/10 backdrop-blur-xl rounded-3xl p-10 relative overflow-hidden flex flex-col">
+              <div className="absolute top-4 right-4 text-8xl font-black text-white/[0.03] select-none">{step.num}</div>
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#000666] to-[#ba1a1a] flex items-center justify-center text-white mb-auto shadow-xl">
+                {step.icon}
+              </div>
+              <div>
+                <h3 className="text-3xl font-bold text-white mb-4">{step.title}</h3>
+                <p className="text-white/60 text-lg leading-relaxed">{step.desc}</p>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// === SECTION 5: FEATURES BENTO GRID ===
+function FeaturesBento() {
+  const [bars, setBars] = useState<number[]>(Array(30).fill(10));
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBars(prev => prev.map(() => 10 + Math.random() * 80));
+    }, 150);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section className="min-h-screen bg-[#050505] py-32 flex flex-col justify-center relative">
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          className="mb-16 text-center"
+        >
+          <h2 className="text-5xl md:text-7xl font-bold text-white tracking-tight mb-6">Why SAHAYAK Wins</h2>
+          <p className="text-xl text-white/60">Built for the modern crisis. Powered by the latest AI.</p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 auto-rows-[200px] gap-6">
+          {/* Cell 1 */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="md:col-span-2 md:row-span-2 bg-gradient-to-br from-[#000666] to-[#000444] rounded-3xl p-10 relative overflow-hidden flex flex-col justify-end group"
+          >
+            <div className="absolute top-10 left-10 right-10 h-32 flex items-end gap-1">
+              {bars.map((h, i) => (
+                <motion.div key={i} className="flex-1 bg-white/20 rounded-t-sm" animate={{ height: `${h}%` }} transition={{ duration: 0.15 }} />
+              ))}
+            </div>
+            <h3 className="text-3xl font-bold text-white mb-2">Acoustic Biomarker AI</h3>
+            <p className="text-white/70">Real-time voice stress analysis detects fear and urgency in milliseconds.</p>
+          </motion.div>
+
+          {/* Cell 2 */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="md:col-span-2 bg-white/5 border border-white/10 rounded-3xl p-8 flex items-center gap-6 overflow-hidden relative"
+          >
+            <div className="flex-1 z-10">
+              <h3 className="text-2xl font-bold text-white mb-2">Suraksha Path Routing</h3>
+              <p className="text-white/60 text-sm">Dynamic AI navigation avoiding historical threat zones.</p>
+            </div>
+            <div className="w-32 h-32 relative shrink-0">
+              <div className="absolute inset-0 border-2 border-dashed border-[#2dd4bf]/30 rounded-full animate-spin-slow"></div>
+              <div className="absolute inset-4 bg-[#2dd4bf]/10 rounded-full backdrop-blur-sm"></div>
+            </div>
+          </motion.div>
+
+          {/* Cell 3 */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="md:col-span-1 bg-[#ba1a1a]/10 border border-[#ba1a1a]/30 rounded-3xl p-8 flex flex-col justify-center items-center text-center group hover:bg-[#ba1a1a] transition-colors"
+          >
+            <FileX className="w-12 h-12 text-[#ba1a1a] mb-4 group-hover:text-white transition-colors" />
+            <h3 className="text-xl font-bold text-[#ba1a1a] group-hover:text-white transition-colors">Auto e-FIR</h3>
+          </motion.div>
+
+          {/* Cell 4 */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="md:col-span-1 bg-amber-500/10 border border-amber-500/30 rounded-3xl p-8 flex flex-col justify-center items-center text-center group hover:bg-amber-500 transition-colors"
+          >
+            <Zap className="w-12 h-12 text-amber-500 mb-4 group-hover:text-white transition-colors" />
+            <h3 className="text-xl font-bold text-amber-500 group-hover:text-white transition-colors">Zero-Touch Dispatch</h3>
+          </motion.div>
+
+          {/* Cell 5 */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="md:col-span-2 bg-white/5 border border-white/10 rounded-3xl p-8 flex flex-col justify-center"
+          >
+            <h3 className="text-2xl font-bold text-white mb-6">Multi-Agency Sync</h3>
+            <div className="flex gap-4">
+              {['NALSA', 'NCW', '112'].map(agency => (
+                <div key={agency} className="px-6 py-3 bg-white/10 rounded-xl font-bold text-white/80">{agency}</div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// === SECTION 6: LIVE STATS ===
+function Counter({ end, suffix = "", duration = 2 }: { end: number, suffix?: string, duration?: number }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "center center"] });
+  const inView = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
+  useEffect(() => {
+    let startTime: number;
+    const updateCount = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
+      setCount(Math.floor(progress * end));
+      if (progress < 1) requestAnimationFrame(updateCount);
+    };
+    
+    const unsubscribe = inView.on("change", (v) => {
+      if (v > 0.5 && count === 0) requestAnimationFrame(updateCount);
+    });
+    return () => unsubscribe();
+  }, [end, duration, count, inView]);
+
+  return <span ref={ref}>{count}{suffix}</span>;
+}
+
+function LiveStats() {
+  return (
+    <section className="min-h-screen bg-[#000222] py-32 flex flex-col items-center justify-center relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 w-full z-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-24">
+          <div className="text-center">
+            <div className="text-5xl md:text-7xl font-black text-[#2dd4bf] mb-4"><Counter end={420} suffix="ms" /></div>
+            <div className="text-white/60 font-bold tracking-widest uppercase">Triage Latency</div>
+          </div>
+          <div className="text-center">
+            <div className="text-5xl md:text-7xl font-black text-[#ba1a1a] mb-4"><Counter end={94} suffix=".3%" /></div>
+            <div className="text-white/60 font-bold tracking-widest uppercase">ASR Accuracy</div>
+          </div>
+          <div className="text-center">
+            <div className="text-5xl md:text-7xl font-black text-white mb-4"><Counter end={28} /></div>
+            <div className="text-white/60 font-bold tracking-widest uppercase">States Active</div>
+          </div>
+          <div className="text-center">
+            <div className="text-5xl md:text-7xl font-black text-[#fbbf24] mb-4"><Counter end={14566} /></div>
+            <div className="text-white/60 font-bold tracking-widest uppercase">Helpline</div>
+          </div>
+        </div>
+
+        <div className="relative w-full max-w-2xl mx-auto h-[400px]">
+          <svg className="w-full h-full" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <motion.path 
+              d="M150 50 L200 20 L250 80 L350 150 L320 250 L200 380 L100 280 L50 180 Z" 
+              stroke="white" 
+              strokeWidth="2" 
+              strokeOpacity="0.2"
+              fill="rgba(0,6,102,0.2)"
+            />
+            {/* Pulsing Dots for Hotspots */}
+            <circle cx="180" cy="120" r="4" fill="#ba1a1a" className="animate-ping" />
+            <circle cx="180" cy="120" r="4" fill="#ba1a1a" />
+            
+            <circle cx="220" cy="180" r="6" fill="#ba1a1a" className="animate-ping" />
+            <circle cx="220" cy="180" r="6" fill="#ba1a1a" />
+
+            <circle cx="120" cy="220" r="5" fill="#ba1a1a" className="animate-ping" />
+            <circle cx="120" cy="220" r="5" fill="#ba1a1a" />
+          </svg>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// === SECTION 7: PLATFORM PILLARS ===
+function PlatformPillars() {
+  const pillars = [
+    { emoji: '🚨', title: 'Crisis Console', desc: 'Live call intercept, SVI scoring, operator triage', link: '/dashboard' },
+    { emoji: '🗺️', title: 'KAVACH Hotspots', desc: 'Predictive threat mapping with 30-day AI forecast', link: '/hotspots' },
+    { emoji: '🛡️', title: 'Victim Sanctuary', desc: 'Secure e-FIR filing, SAATHI legal bot, case tracking', link: '/sanctuary' },
+    { emoji: '🧭', title: 'Suraksha Path', desc: 'AI-safe route navigation avoiding threat zones', link: '/suraksha' },
+    { emoji: '📊', title: 'SVI Telemetry', desc: 'Real-time NLP transcript analysis', link: '/telemetry' },
+    { emoji: '📱', title: 'Mobile Panic', desc: 'Silent SOS, IVRS panic, WhatsApp integration', link: '/mobile' },
+  ];
+
+  return (
+    <section id="platform" className="min-h-screen bg-[#070d1a] py-32 flex flex-col justify-center">
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <h2 className="text-5xl md:text-7xl font-bold text-white tracking-tight mb-16">What Does SAHAYAK Do?</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {pillars.map((p, i) => (
+            <Link key={i} href={p.link}>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-white/5 border border-white/10 p-8 rounded-3xl hover:border-[#ba1a1a] transition-all group h-full flex flex-col"
+              >
+                <div className="text-4xl mb-6 bg-white/5 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:scale-110 transition-transform">{p.emoji}</div>
+                <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-[#ba1a1a] transition-colors">{p.title}</h3>
+                <p className="text-white/60 mb-6 flex-1">{p.desc}</p>
+                <div className="flex justify-end">
+                  <ArrowRight className="text-white/40 group-hover:text-[#ba1a1a] group-hover:translate-x-2 transition-all" />
+                </div>
+              </motion.div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// === SECTION 8: TESTIMONIALS ===
+function Testimonials() {
+  const [active, setActive] = useState(0);
+  const t = [
+    { name: "Dr. Meena Gupta", role: "District Collector", quote: "SAHAYAK reduced our response time from 22 minutes to under 4 minutes. This technology saves lives." },
+    { name: "Rajan Prasad", role: "PCR Inspector", quote: "The SVI score tells us instantly who needs the fastest response. We act before the operator even speaks." },
+    { name: "Anjali Devi", role: "Survivor, Bundelkhand", quote: "The SAATHI bot helped me file my FIR from home. I never had to face the police station alone." }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => setActive(p => (p + 1) % t.length), 4000);
+    return () => clearInterval(timer);
+  }, [t.length]);
+
+  return (
+    <section className="min-h-screen bg-[#050505] py-32 flex flex-col justify-center">
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <h2 className="text-5xl font-bold text-white mb-20 text-center">Voices from the Field</h2>
+        <div className="flex flex-col items-center">
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={active}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="max-w-4xl text-center"
+            >
+              <div className="text-7xl text-[#ba1a1a] opacity-50 mb-6">"</div>
+              <p className="text-3xl md:text-5xl text-white font-medium leading-tight mb-12">
+                {t[active].quote}
+              </p>
+              <div>
+                <div className="font-bold text-xl text-white">{t[active].name}</div>
+                <div className="text-[#2dd4bf] uppercase tracking-widest text-sm mt-2">{t[active].role}</div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+          <div className="flex gap-3 mt-16">
+            {t.map((_, i) => (
+              <button key={i} onClick={() => setActive(i)} className={`w-3 h-3 rounded-full transition-all ${i === active ? 'bg-[#ba1a1a] w-10' : 'bg-white/20'}`} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// === SECTION 9: CTA ===
+function CTA() {
+  return (
+    <section className="min-h-screen bg-gradient-to-b from-[#000666] via-[#000444] to-[#050505] flex flex-col justify-center relative overflow-hidden py-32">
+      <div className="max-w-5xl mx-auto px-6 w-full text-center relative z-10">
+        <motion.div 
+          initial={{ scale: 0.8, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          className="w-24 h-24 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-8 backdrop-blur-xl border border-white/20 shadow-[0_0_50px_rgba(255,255,255,0.1)]"
+        >
+          <Shield className="w-12 h-12 text-white" />
+        </motion.div>
+        <h2 className="text-6xl md:text-8xl font-black text-white tracking-tighter mb-8">Confidence in Every Response</h2>
+        <p className="text-xl md:text-2xl text-white/70 mb-16 max-w-3xl mx-auto">
+          SAHAYAK-AI is committed to protecting every vulnerable citizen with the speed and precision of modern AI.
+        </p>
+        <div className="flex flex-col sm:flex-row justify-center gap-6 mb-24">
+          <Link href="/dashboard" className="bg-[#ba1a1a] hover:bg-[#a01616] text-white px-10 py-5 rounded-full text-lg font-bold transition-all flex items-center justify-center gap-2">
+            Access Crisis Console <ArrowRight />
+          </Link>
+          <Link href="/suraksha" className="border border-white/30 hover:bg-white/10 text-white px-10 py-5 rounded-full text-lg font-bold transition-all flex items-center justify-center gap-2">
+            Explore Suraksha Path <ArrowRight />
+          </Link>
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-8 md:gap-12 opacity-50">
+          {['Ministry DSJ&E', 'PoA Act Compliant', 'DPDP Privacy Safe', 'Whisper v3 ASR', 'ISO 27001'].map(badge => (
+            <div key={badge} className="text-sm font-bold tracking-widest uppercase text-white flex items-center gap-2">
+              <Shield className="w-4 h-4" /> {badge}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// === SECTION 10: FOOTER ===
+function Footer() {
+  return (
+    <footer className="bg-[#030303] py-16 border-t border-white/10">
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+          <div>
+            <Link href="/" className="flex items-center gap-2 mb-6">
+              <Shield className="text-[#ba1a1a] w-8 h-8" />
+              <span className="font-bold text-2xl tracking-tighter text-white">
+                SAHAYAK<span className="text-[#ba1a1a]">-AI</span>
+              </span>
+            </Link>
+            <p className="text-white/50 max-w-sm">National Helpline Against Atrocities. AI-powered trauma triage platform for India.</p>
+          </div>
+          
+          <div className="flex flex-col gap-4">
+            <h4 className="text-white font-bold mb-2">Platform</h4>
+            {['Home', 'Platform', 'Suraksha Path', 'How It Works', 'Crisis Console'].map(l => (
+              <Link key={l} href="#" className="text-white/50 hover:text-white transition-colors">{l}</Link>
+            ))}
+          </div>
+
+          <div>
+            <h4 className="text-white font-bold mb-6">Emergency</h4>
+            <div className="flex flex-col gap-4">
+              <a href="tel:14566" className="text-3xl font-black text-[#ba1a1a] hover:text-[#a01616]">14566 <span className="text-sm text-white/50 font-normal">NHAA</span></a>
+              <a href="tel:1091" className="text-xl font-bold text-white/80">1091 <span className="text-sm text-white/50 font-normal">Women Helpline</span></a>
+              <a href="tel:112" className="text-xl font-bold text-white/80">112 <span className="text-sm text-white/50 font-normal">National Emergency</span></a>
             </div>
           </div>
-          <h3 className={`text-xl font-bold text-slate-900 ${hoverColor} transition-colors duration-300`}>{title}</h3>
-          <p className="text-sm text-slate-500 mt-2 leading-relaxed">{description}</p>
         </div>
-        <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold">
-          <span className={`px-2.5 py-1 rounded-full border ${badgeColor}`}>SAHAYAK Module</span>
-          <span className="text-slate-400 group-hover:text-slate-600 flex items-center gap-1 transition-colors">
-            Explore <ArrowRight className="w-3.5 h-3.5" />
-          </span>
+
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-white/40 text-sm">
+          <p>© 2026 SAHAYAK-AI. National Helpline Against Atrocities. SIH 2026.</p>
+          <div className="flex gap-6">
+            <Link href="#" className="hover:text-white">Privacy Policy</Link>
+            <Link href="#" className="hover:text-white">Terms of Service</Link>
+          </div>
         </div>
-      </Link>
-    </StaggerChild>
+      </div>
+    </footer>
+  );
+}
+
+export default function LandingPage() {
+  return (
+    <main className="bg-[#050505] min-h-screen text-white font-sans selection:bg-[#ba1a1a] selection:text-white">
+      <Navbar />
+      <Hero />
+      <ProblemSection />
+      <HowItWorksSection />
+      <FeaturesBento />
+      <LiveStats />
+      <PlatformPillars />
+      <Testimonials />
+      <CTA />
+      <Footer />
+    </main>
   );
 }
