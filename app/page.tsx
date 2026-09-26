@@ -24,34 +24,46 @@ function Navbar() {
       <motion.nav 
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#050505]/90 backdrop-blur-xl border-b border-white/10 py-4' : 'bg-transparent py-6'}`}
+        className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled ? 'py-4' : 'py-6'}`}
       >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 z-50">
-            <Shield className="text-[#ba1a1a] w-8 h-8" />
-            <span className="font-bold text-2xl tracking-tighter text-white">
+        <div className={`mx-auto flex items-center justify-between transition-all duration-500 ${
+          scrolled 
+            ? 'max-w-7xl bg-[#0b0614]/80 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)] rounded-full px-6 py-3' 
+            : 'max-w-7xl px-6 py-2'
+        }`}>
+          <Link href="/" className="flex items-center gap-3 z-50 group">
+            <div className="relative flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 group-hover:border-[#ba1a1a]/50 transition-colors">
+              <Shield className="text-[#ba1a1a] w-5 h-5 drop-shadow-[0_0_8px_rgba(186,26,26,0.6)]" />
+            </div>
+            <span className="font-black text-xl md:text-2xl tracking-tighter text-white drop-shadow-md">
               SAHAYAK<span className="text-[#ba1a1a]">-AI</span>
             </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-8">
             {['Home', 'Platform', 'Suraksha Path', 'How It Works', 'Crisis Console'].map((item) => (
-              <Link key={item} href={`#${item.toLowerCase().replace(/ /g, '-')}`} className="text-sm font-medium text-white/70 hover:text-white transition-colors">
+              <Link 
+                key={item} 
+                href={`#${item.toLowerCase().replace(/ /g, '-')}`} 
+                className="relative text-sm font-semibold text-white/60 hover:text-white transition-all duration-300 group"
+              >
                 {item}
+                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-[#ba1a1a] to-transparent group-hover:w-full transition-all duration-300"></span>
               </Link>
             ))}
           </div>
 
-          <div className="hidden md:flex items-center gap-4">
-            <Link href="tel:14566" className="bg-[#ba1a1a] hover:bg-[#a01616] text-white px-6 py-2.5 rounded-full text-sm font-bold transition-colors flex items-center gap-2">
-              <PhoneIncoming className="w-4 h-4" /> Call 14566
+          <div className="hidden lg:flex items-center gap-4">
+            <Link href="tel:14566" className="relative bg-gradient-to-r from-[#ba1a1a] to-[#900f0f] text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all hover:scale-105 shadow-[0_0_15px_rgba(186,26,26,0.4)] hover:shadow-[0_0_25px_rgba(186,26,26,0.7)] flex items-center gap-2 overflow-hidden group">
+              <span className="absolute inset-0 w-full h-full bg-white/20 -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></span>
+              <PhoneIncoming className="w-4 h-4 animate-pulse" /> 14566
             </Link>
-            <Link href="/dashboard" className="bg-[#000666] hover:bg-[#000444] text-white px-6 py-2.5 rounded-full text-sm font-bold transition-colors">
+            <Link href="/dashboard" className="bg-white/5 border border-white/10 hover:bg-white hover:text-[#050505] text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg hover:shadow-[0_0_20px_rgba(255,255,255,0.4)]">
               Access Dashboard
             </Link>
           </div>
 
-          <button className="md:hidden text-white z-50" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button className="lg:hidden text-white z-50 p-2 bg-white/5 border border-white/10 rounded-full" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X /> : <Menu />}
           </button>
         </div>
