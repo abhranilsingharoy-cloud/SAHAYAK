@@ -17,7 +17,9 @@ import {
   ChevronRight,
   LifeBuoy,
   Navigation,
-  Network
+  Network,
+  FileText,
+  Users
 } from 'lucide-react';
 
 const APP_LINKS = [
@@ -28,6 +30,8 @@ const APP_LINKS = [
   { name: 'Mobile Panic', href: '/mobile', icon: Smartphone },
   { name: 'Suraksha Path', href: '/suraksha', icon: Navigation },
   { name: 'Integrations', href: '/integrations', icon: Network },
+  { name: 'e-FIR Portal', href: '/efir', icon: FileText },
+  { name: 'NCW Portal', href: '/ncw', icon: Users },
 ];
 
 export default function AppLayoutClient({ children }: { children: React.ReactNode }) {
