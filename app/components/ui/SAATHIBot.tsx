@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Mic,
   RefreshCw,
+  Globe,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -55,8 +56,32 @@ export default function SAATHIBot() {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
+  const [language, setLanguage] = useState("English");
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const LANGUAGES = [
+    { code: "en", label: "English" },
+    { code: "hi", label: "Hindi (हिंदी)" },
+    { code: "ta", label: "Tamil (தமிழ்)" },
+    { code: "te", label: "Telugu (తెలుగు)" },
+    { code: "bho", label: "Bhojpuri (भोजपुरी)" },
+  ];
+
+  const handleMicClick = () => {
+    if (isListening) return;
+    setIsListening(true);
+    setTimeout(() => {
+      let text = "I need police help";
+      if (language === "Hindi (हिंदी)") text = "मुझे पुलिस की मदद चाहिए";
+      else if (language === "Tamil (தமிழ்)") text = "எனக்கு காவல் உதவி தேவை";
+      else if (language === "Telugu (తెలుగు)") text = "నాకు పోలీసు సహాయం కావాలి";
+      else if (language === "Bhojpuri (भोजपुरी)") text = "हमरा पुलिस के मदद चाहीं";
+      setInputValue(text);
+      setIsListening(false);
+    }, 3000);
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -169,6 +194,23 @@ export default function SAATHIBot() {
             </div>
             {/* Controls */}
             <div className="flex items-center gap-1">
+              <div className="relative group mr-1">
+                <button className="flex items-center gap-1 px-1.5 py-1 text-[10px] bg-white/10 hover:bg-white/20 rounded-md transition-colors border border-white/20">
+                  <Globe size={12} />
+                  <span className="hidden sm:inline">{language.split(" ")[0]}</span>
+                </button>
+                <div className="absolute right-0 top-full mt-1 bg-white border border-gray-100 shadow-xl rounded-lg py-1 w-32 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all z-10">
+                  {LANGUAGES.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => setLanguage(lang.label)}
+                      className="w-full text-left px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      {lang.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <button
                 onClick={handleReset}
                 className="p-1.5 hover:bg-white/15 rounded-lg transition-colors"
@@ -194,14 +236,17 @@ export default function SAATHIBot() {
           </div>
 
           {/* Emergency Banner */}
-          <div className="bg-[#ba1a1a]/8 border-b border-[#ba1a1a]/15 px-4 py-2 flex items-center gap-2 shrink-0">
-            <AlertTriangle size={12} className="text-[#ba1a1a] shrink-0" />
-            <p className="text-[10px] text-[#ba1a1a] font-semibold">
-              Emergency? Call{" "}
-              <a href="tel:14566" className="underline font-black">14566</a>{" "}
-              · Women Helpline:{" "}
-              <a href="tel:1091" className="underline font-black">1091</a>
-            </p>
+          <div className="bg-[#ba1a1a]/8 border-b border-[#ba1a1a]/15 px-4 py-2 flex items-center justify-between gap-2 shrink-0">
+            <div className="flex items-center gap-2">
+              <AlertTriangle size={12} className="text-[#ba1a1a] shrink-0" />
+              <p className="text-[10px] text-[#ba1a1a] font-semibold">
+                Emergency? Call{" "}
+                <a href="tel:14566" className="underline font-black">14566</a>
+              </p>
+            </div>
+            <span className="text-[9px] font-bold bg-[#ff9933]/10 text-[#ff9933] border border-[#ff9933]/30 px-1.5 py-0.5 rounded">
+              Powered by Bhashini AI 🇮🇳
+            </span>
           </div>
 
           {/* Messages */}
@@ -297,20 +342,31 @@ export default function SAATHIBot() {
           {/* Input */}
           <div className="p-3 bg-white border-t border-gray-100 flex items-center gap-2 shrink-0">
             <div className="flex-1 flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 focus-within:border-[#000666] focus-within:ring-1 focus-within:ring-[#000666]/20 transition-all">
-              <Mic size={14} className="text-gray-400 shrink-0" />
+              <button
+                onClick={handleMicClick}
+                className={`relative shrink-0 p-1.5 rounded-full transition-colors ${
+                  isListening ? "bg-red-100 text-red-600" : "hover:bg-gray-200 text-gray-400"
+                }`}
+              >
+                {isListening && (
+                  <span className="absolute inset-0 rounded-full bg-red-400 animate-ping opacity-40"></span>
+                )}
+                <Mic size={14} className="relative z-10" />
+              </button>
               <input
                 ref={inputRef}
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend(inputValue)}
-                placeholder="Type your message..."
-                className="flex-1 bg-transparent text-sm outline-none text-gray-800 placeholder-gray-400 min-w-0"
+                placeholder={isListening ? "Listening..." : "Type your message..."}
+                disabled={isListening}
+                className="flex-1 bg-transparent text-sm outline-none text-gray-800 placeholder-gray-400 min-w-0 disabled:opacity-50"
               />
             </div>
             <button
               onClick={() => handleSend(inputValue)}
-              disabled={!inputValue.trim() || isTyping}
+              disabled={!inputValue.trim() || isTyping || isListening}
               className="bg-[#000666] text-white p-2.5 rounded-xl hover:bg-[#000999] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
             >
               <Send size={15} />

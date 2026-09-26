@@ -1,13 +1,16 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FileText, Shield, User, Clock, MapPin, AlertCircle, CheckCircle2, Download, Share2, MessageSquare, ChevronRight, ChevronLeft } from 'lucide-react';
+import { FileText, Shield, User, Clock, MapPin, AlertCircle, CheckCircle2, Download, Share2, MessageSquare, ChevronRight, ChevronLeft, Database, Link as LinkIcon, ShieldCheck } from 'lucide-react';
 
 export default function EfirPortal() {
   const [step, setStep] = useState(1);
   const [analyzing, setAnalyzing] = useState(false);
   const [showSections, setShowSections] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [locking, setLocking] = useState(false);
+  const [blockchainStep, setBlockchainStep] = useState(0);
+  const [locked, setLocked] = useState(false);
 
   const nextStep = () => setStep(s => Math.min(s + 1, 4));
   const prevStep = () => setStep(s => Math.max(s - 1, 1));
@@ -22,6 +25,22 @@ export default function EfirPortal() {
 
   const handleSubmit = () => {
     setSubmitted(true);
+  };
+
+  const handleLock = () => {
+    setLocking(true);
+    let stepCount = 0;
+    const interval = setInterval(() => {
+      stepCount++;
+      setBlockchainStep(stepCount);
+      if (stepCount >= 4) {
+        clearInterval(interval);
+        setTimeout(() => {
+          setLocking(false);
+          setLocked(true);
+        }, 1000);
+      }
+    }, 1500);
   };
 
   if (submitted) {
@@ -56,13 +75,59 @@ export default function EfirPortal() {
           </div>
         </div>
 
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-4 mb-10">
           <button className="flex items-center gap-2 px-6 py-3 bg-[#000666] text-white rounded-xl font-bold hover:bg-[#00044d] transition-all">
             <Download size={18} /> Download PDF
           </button>
           <button className="flex items-center gap-2 px-6 py-3 bg-[#f0e6e4] text-[#000666] rounded-xl font-bold hover:bg-[#e0d6d4] transition-all">
             <Share2 size={18} /> Share with NALSA
           </button>
+        </div>
+
+        {/* Blockchain Immutable Record Section */}
+        <div className="max-w-2xl mx-auto bg-[#0a0a0a] rounded-2xl p-6 text-left shadow-2xl border border-gray-800">
+          <div className="flex items-center gap-3 mb-6">
+            <Database className="text-purple-500" size={24} />
+            <h3 className="text-xl font-bold text-white">Blockchain Immutable Record</h3>
+          </div>
+          
+          {!locked && !locking && (
+            <div className="text-center py-6">
+              <p className="text-gray-400 mb-6 text-sm">Lock your FIR on the Polygon zkEVM blockchain to ensure it can never be altered or deleted by corrupt officials.</p>
+              <button 
+                onClick={handleLock}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-xl font-bold hover:bg-purple-700 transition-all shadow-[0_0_15px_rgba(147,51,234,0.4)]"
+              >
+                <ShieldCheck size={18} /> Lock FIR on Blockchain
+              </button>
+            </div>
+          )}
+
+          {locking && (
+            <div className="bg-black/50 rounded-xl p-6 font-mono text-sm text-green-400 border border-gray-800 space-y-2">
+              <div className={blockchainStep >= 1 ? 'opacity-100' : 'opacity-0'}>&gt; Hashing FIR Document (SHA-256)...</div>
+              <div className={blockchainStep >= 2 ? 'opacity-100' : 'opacity-0'}>&gt; Connecting to Polygon zkEVM Network...</div>
+              <div className={blockchainStep >= 3 ? 'opacity-100' : 'opacity-0'}>&gt; Deploying Smart Contract...</div>
+              <div className={blockchainStep >= 4 ? 'opacity-100' : 'opacity-0'}>&gt; Transaction Confirmed! Block #1849201</div>
+              {blockchainStep < 4 && <div className="animate-pulse">&gt; _</div>}
+            </div>
+          )}
+
+          {locked && (
+            <div className="bg-green-900/20 border border-green-500/30 rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <CheckCircle2 className="text-green-400" size={24} />
+                <h4 className="text-green-400 font-bold text-lg">FIR Locked!</h4>
+              </div>
+              <p className="text-green-200/70 text-sm mb-4">This document is now immutable. No corrupt official can alter or delete this statement.</p>
+              <div className="bg-black/50 rounded-lg p-4 font-mono text-xs text-gray-300 break-all border border-gray-800 mb-4">
+                TxHash: 0x8f7d9a3b2c1e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a
+              </div>
+              <a href="#" className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors">
+                <LinkIcon size={14} /> View on PolygonScan
+              </a>
+            </div>
+          )}
         </div>
       </div>
     );

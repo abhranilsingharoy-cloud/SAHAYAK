@@ -15,7 +15,8 @@ import {
   FileText, 
   Printer, 
   Plus, 
-  AlertCircle 
+  AlertCircle,
+  Layers
 } from 'lucide-react';
 
 export default function SurakshaPage() {
@@ -23,6 +24,7 @@ export default function SurakshaPage() {
   const [showResults, setShowResults] = useState(false);
   const [liveTracking, setLiveTracking] = useState(false);
   const [coords, setCoords] = useState("25.1745°N, 80.8322°E");
+  const [mapLayer, setMapLayer] = useState("Standard");
   const [logs, setLogs] = useState<string[]>([]);
   const [showCert, setShowCert] = useState(false);
   const [certDate, setCertDate] = useState("");
@@ -292,23 +294,58 @@ export default function SurakshaPage() {
         {/* RIGHT COLUMN (MAP) */}
         <div className="w-full lg:w-[60%] flex flex-col gap-4">
           <div className="flex-1 bg-[#0d1117] rounded-2xl overflow-hidden relative border-2 border-[#000666]/20 shadow-xl min-h-[400px] lg:min-h-0">
+            {/* Ola Maps Badge */}
+            <div className="absolute bottom-4 left-4 z-20 pointer-events-none">
+              <div className="bg-white text-black text-xs font-bold px-3 py-1.5 rounded-md shadow-lg border border-gray-200">
+                Powered by Ola Maps API 🇮🇳
+              </div>
+            </div>
+
+            {/* Layer Toggle */}
+            <div className="absolute top-4 left-4 z-20 flex bg-black/70 backdrop-blur-md rounded-lg p-1 border border-white/10 shadow-lg">
+              {['Standard', 'Satellite', 'NCRB Heatmap'].map(layer => (
+                <button
+                  key={layer}
+                  onClick={() => setMapLayer(layer)}
+                  className={`px-3 py-1.5 text-[10px] uppercase font-bold rounded-md transition-all ${
+                    mapLayer === layer ? 'bg-[#ba1a1a] text-white shadow-md' : 'text-white/60 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  {layer}
+                </button>
+              ))}
+            </div>
+
+            {/* Floating Panel for NCRB Heatmap */}
+            {mapLayer === 'NCRB Heatmap' && (
+              <div className="absolute top-16 left-4 z-20 bg-black/80 backdrop-blur-md border border-red-500/30 p-3 rounded-lg shadow-2xl max-w-[200px] animate-in fade-in slide-in-from-left-4">
+                <div className="flex items-center gap-2 mb-1">
+                  <Layers className="text-red-400 w-4 h-4" />
+                  <span className="text-xs font-bold text-white uppercase">KAVACH Threat Intel</span>
+                </div>
+                <p className="text-[10px] text-white/70">
+                  Data sourced from NCRB 2025 dataset. Displaying historical crime density and active atrocity hotspots.
+                </p>
+              </div>
+            )}
+
             {/* Live Badge & Coords */}
             <div className="absolute top-4 right-4 z-20 flex flex-col items-end gap-2">
               {showResults && liveTracking && (
-                <div className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-2 animate-pulse">
+                <div className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-2 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.6)]">
                   <div className="w-2 h-2 bg-white rounded-full" />
                   LIVE
                 </div>
               )}
               {showResults && (
-                <div className="bg-black/60 backdrop-blur-sm text-white/90 text-xs font-mono px-3 py-1 rounded border border-white/10">
+                <div className="bg-black/80 backdrop-blur-sm text-green-400 text-xs font-mono px-3 py-1.5 rounded border border-green-500/30 shadow-lg">
                   {coords}
                 </div>
               )}
             </div>
             
             {/* SVG Map Visualization */}
-            <svg viewBox="0 0 800 600" className="w-full h-full absolute inset-0">
+            <svg viewBox="0 0 800 600" className={`w-full h-full absolute inset-0 transition-all duration-700 ${mapLayer === 'Satellite' ? 'brightness-75 contrast-125' : ''}`}>
               <defs>
                 <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
                   <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
@@ -319,13 +356,30 @@ export default function SurakshaPage() {
                   <stop offset="0%" stopColor="#00ff00" stopOpacity="0.8"/>
                   <stop offset="100%" stopColor="#00aa00" stopOpacity="0.8"/>
                 </linearGradient>
+                
+                <radialGradient id="heatmap1" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#ff0000" stopOpacity="0.7"/>
+                  <stop offset="50%" stopColor="#ff7b00" stopOpacity="0.4"/>
+                  <stop offset="100%" stopColor="#ffea00" stopOpacity="0"/>
+                </radialGradient>
               </defs>
               
-              <rect width="800" height="600" fill="url(#grid)" />
+              <rect width="800" height="600" fill={mapLayer === 'Satellite' ? '#070a0f' : 'url(#grid)'} />
               
               {/* Abstract Base Map Shapes (UP region approximation) */}
-              <path d="M 50,150 Q 200,100 400,200 T 750,150 L 700,500 Q 500,550 300,450 Z" fill="#161b22" stroke="#30363d" strokeWidth="2" />
-              <path d="M 100,200 Q 300,150 450,250 T 650,250 L 600,400 Q 400,450 200,350 Z" fill="#21262d" stroke="#30363d" strokeWidth="1" />
+              <path d="M 50,150 Q 200,100 400,200 T 750,150 L 700,500 Q 500,550 300,450 Z" fill={mapLayer === 'Satellite' ? '#0f141a' : '#161b22'} stroke="#30363d" strokeWidth="2" />
+              <path d="M 100,200 Q 300,150 450,250 T 650,250 L 600,400 Q 400,450 200,350 Z" fill={mapLayer === 'Satellite' ? '#1a222c' : '#21262d'} stroke="#30363d" strokeWidth="1" />
+
+              {/* Heatmap Overlay */}
+              {mapLayer === 'NCRB Heatmap' && (
+                <g className="animate-in fade-in duration-1000" style={{ mixBlendMode: 'screen' }}>
+                  <circle cx="350" cy="280" r="150" fill="url(#heatmap1)" />
+                  <circle cx="520" cy="380" r="120" fill="url(#heatmap1)" />
+                  <circle cx="220" cy="400" r="140" fill="url(#heatmap1)" />
+                  <circle cx="600" cy="200" r="100" fill="url(#heatmap1)" />
+                  <circle cx="450" cy="450" r="130" fill="url(#heatmap1)" />
+                </g>
+              )}
 
               {/* Threat Zones */}
               {showResults && (
